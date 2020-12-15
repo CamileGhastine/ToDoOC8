@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fe25c146-4dd4-494d-a9d7-bacdd33d2d7b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Memo.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Memo.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +110,7 @@
     </include_path>
   </component>
   <component name="ProjectId" id="1lhBUVOjSzqh0gSbtrvzypcKatb" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -126,19 +121,20 @@
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="TERMINAL_CUSTOM_COMMANDS_GOT_IT" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\camile\coding\Parcours Openclassroom\projet 8 - ToDo\ToDoOC8" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\camile\coding\Parcours Openclassroom\projet 8 - ToDo\ToDoOC8\templates" />
       <recent name="C:\camile\coding\Parcours Openclassroom\projet 8 - ToDo\ToDoOC8\public" />
+      <recent name="C:\camile\coding\Parcours Openclassroom\projet 8 - ToDo\ToDoOC8\templates" />
       <recent name="C:\camile\coding\Parcours Openclassroom\projet 8 - ToDo\ToDoOC8\src" />
       <recent name="C:\camile\coding\Parcours Openclassroom\projet 8 - ToDo\ToDoOC8\src\Controller" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\camile\coding\Parcours Openclassroom\projet 8 - ToDo\ToDoOC8" />
     </key>
   </component>
   <component name="SvnConfiguration">
@@ -153,6 +149,7 @@
       <updated>1608039458709</updated>
       <workItem from="1608039460016" duration="105000" />
       <workItem from="1608039599405" duration="6672000" />
+      <workItem from="1608046475301" duration="10681000" />
     </task>
     <servers />
   </component>

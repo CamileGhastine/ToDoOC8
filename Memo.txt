@@ -1,2 +1,3 @@
 Improvement :
-- translation in french
+- Translation in french
+- No duplicate username when register
