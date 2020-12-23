@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fe25c146-4dd4-494d-a9d7-bacdd33d2d7b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Memo.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Memo.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/TaskController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TaskController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,8 +124,9 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="TERMINAL_CUSTOM_COMMANDS_GOT_IT" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../SnowTricksP6-main" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="vcs.Mercurial" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -149,7 +151,8 @@
       <updated>1608039458709</updated>
       <workItem from="1608039460016" duration="105000" />
       <workItem from="1608039599405" duration="6672000" />
-      <workItem from="1608046475301" duration="10681000" />
+      <workItem from="1608046475301" duration="20443000" />
+      <workItem from="1608703657086" duration="55000" />
     </task>
     <servers />
   </component>
@@ -157,17 +160,29 @@
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="620" y="41" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1608067079449">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="620" y="41" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/-1366.304.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1608067079449" />
     <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1608040681827">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/-1366.304.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1608040681827" />
-    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1608044396672">
+    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1608066659555">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/-1366.304.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1608044396672" />
-    <state x="637" y="243" key="NewPhpClassDialog" timestamp="1608040546987">
+    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/-1366.304.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1608066659555" />
+    <state x="463" y="119" key="FileChooserDialogImpl" timestamp="1608703713211">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="463" y="119" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1608703713211" />
+    <state x="637" y="243" key="NewPhpClassDialog" timestamp="1608066613664">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="637" y="243" key="NewPhpClassDialog/-1366.304.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1608040546987" />
+    <state x="637" y="243" key="NewPhpClassDialog/-1366.304.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1608066613664" />
+    <state x="461" y="165" key="SettingsEditor" timestamp="1608066066488">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="461" y="165" key="SettingsEditor/-1366.304.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1608066066488" />
   </component>
 </project>

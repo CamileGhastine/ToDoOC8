@@ -4,6 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
+use App\Service\HandleForm;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,21 +24,18 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/create", name="task_create")
+     *
+     * @param Form $form
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, HandleForm $handleForm)
     {
-        $task = new Task();
+        $task = new Task;
+        /** @var Form $form */
         $form = $this->createForm(TaskType::class, $task);
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-
-            $em->persist($task);
-            $em->flush();
-
-            $this->addFlash('success', 'La tâche a été bien été ajoutée.');
+        $form = $handleForm->handle($request, $form, $task);
+        if (!$form) {
+            $this->addFlash('success', 'La tâche a bien été  ajoutée.');
 
             return $this->redirectToRoute('task_list');
         }
@@ -43,18 +44,22 @@ class TaskController extends AbstractController
     }
 
     /**
-     * @Route("/tasks/{id}/edit", name="task_edit")
+     * @Route("/tasks/{id?null}/edit", name="task_edit")
+     *
+     * @param Request $request
+     * @param Task $task
+     * @param HandleForm $handleForm
+     *
+     * @return RedirectResponse|Response
      */
-    public function editAction(Task $task, Request $request)
+    public function editAction(Request $request, Task $task, HandleForm $handleForm)
     {
+        /** @var Form $form */
         $form = $this->createForm(TaskType::class, $task);
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            $this->addFlash('success', 'La tâche a bien été modifiée.');
+        $form = $handleForm->handle($request, $form, $task);
+        if (!$form) {
+            $this->addFlash('success', 'La tâche a été modifiée avec succès.');
 
             return $this->redirectToRoute('task_list');
         }
@@ -73,7 +78,7 @@ class TaskController extends AbstractController
         $task->toggle(!$task->isDone());
         $this->getDoctrine()->getManager()->flush();
 
-        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+        $this->addFlash('success', sprintf('La tâche %s a été marquée comme faite.', $task->getTitle()));
 
         return $this->redirectToRoute('task_list');
     }
@@ -87,7 +92,7 @@ class TaskController extends AbstractController
         $em->remove($task);
         $em->flush();
 
-        $this->addFlash('success', 'La tâche a bien été supprimée.');
+        $this->addFlash('success', 'La tâche a été supprimée avec succès.');
 
         return $this->redirectToRoute('task_list');
     }

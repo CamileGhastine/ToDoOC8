@@ -1,3 +1,5 @@
 Improvement :
 - Translation in french
 - No duplicate username when register
+- Typo
+- Service HandleForm
