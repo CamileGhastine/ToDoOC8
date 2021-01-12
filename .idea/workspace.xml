@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="fe25c146-4dd4-494d-a9d7-bacdd33d2d7b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Memo.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Memo.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/TaskController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TaskController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataFixtures/TaskFixtures.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataFixtures/TaskFixtures.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataFixtures/UserFixtures.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataFixtures/UserFixtures.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,6 +108,8 @@
       <path value="$PROJECT_DIR$/vendor/symfony/monolog-bundle" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-apcu" />
       <path value="$PROJECT_DIR$/vendor/symfony/translation" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/doctrine-fixtures-bundle" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/data-fixtures" />
     </include_path>
   </component>
   <component name="ProjectId" id="1lhBUVOjSzqh0gSbtrvzypcKatb" />
@@ -124,19 +126,20 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="TERMINAL_CUSTOM_COMMANDS_GOT_IT" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../SnowTricksP6-main" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/Repository" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="vcs.Mercurial" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\camile\coding\Parcours Openclassroom\projet 8 - ToDo\ToDoOC8\src\Repository" />
+      <recent name="C:\camile\coding\Parcours Openclassroom\projet 8 - ToDo\ToDoOC8" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\camile\coding\Parcours Openclassroom\projet 8 - ToDo\ToDoOC8\public" />
       <recent name="C:\camile\coding\Parcours Openclassroom\projet 8 - ToDo\ToDoOC8\templates" />
       <recent name="C:\camile\coding\Parcours Openclassroom\projet 8 - ToDo\ToDoOC8\src" />
       <recent name="C:\camile\coding\Parcours Openclassroom\projet 8 - ToDo\ToDoOC8\src\Controller" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\camile\coding\Parcours Openclassroom\projet 8 - ToDo\ToDoOC8" />
     </key>
   </component>
   <component name="SvnConfiguration">
@@ -153,6 +156,14 @@
       <workItem from="1608039599405" duration="6672000" />
       <workItem from="1608046475301" duration="20443000" />
       <workItem from="1608703657086" duration="55000" />
+      <workItem from="1608707290439" duration="939000" />
+      <workItem from="1610138029125" duration="809000" />
+      <workItem from="1610176806399" duration="3326000" />
+      <workItem from="1610192970720" duration="1191000" />
+      <workItem from="1610381807066" duration="704000" />
+      <workItem from="1610384034427" duration="1622000" />
+      <workItem from="1610445490952" duration="11030000" />
+      <workItem from="1610474020883" duration="4891000" />
     </task>
     <servers />
   </component>
@@ -160,17 +171,25 @@
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="620" y="41" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1608067079449">
+    <state x="-1003" y="404" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1610381991561">
+      <screen x="-1366" y="304" width="1366" height="728" />
+    </state>
+    <state x="510" y="143" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/-1366.304.1366.728/0.0.1920.1040/1920.0.1280.984@0.0.1920.1040" timestamp="1610192164479" />
+    <state x="-1003" y="404" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/-1366.304.1366.728/1920.0.1280.984/0.0.1920.1040@-1366.304.1366.728" timestamp="1610381991561" />
+    <state x="363" y="100" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1366.728@0.0.1366.728" timestamp="1610176263316" />
+    <state x="620" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1610462285891">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="620" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/-1366.304.1366.728/0.0.1920.1040/1920.0.1280.984@0.0.1920.1040" timestamp="1610462285891" />
     <state x="620" y="41" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/-1366.304.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1608067079449" />
     <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1608040681827">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/-1366.304.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1608040681827" />
-    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1608066659555">
+    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1610465265311">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/-1366.304.1366.728/0.0.1920.1040/1920.0.1280.984@0.0.1920.1040" timestamp="1610465265311" />
     <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/-1366.304.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1608066659555" />
     <state x="463" y="119" key="FileChooserDialogImpl" timestamp="1608703713211">
       <screen x="0" y="0" width="1366" height="728" />
