@@ -7,5 +7,7 @@
 
             <button type="submit" class="btn btn-success pull-right">Modifier</button>
         {{ form_end(form) }}
+        {% set user = task.user == false ? 'Anonyme' : task.user.username  %}
+        <p><em>Crée par {{ user }}</em></p>
     </div>
 {% endblock %}
