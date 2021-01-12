@@ -17,8 +17,8 @@ class TaskFixtures extends Fixture implements dependentFixtureInterface
 
              $task = new Task();
 
-             $task -> setTitle('tache n°$i');
-             $task -> setContent('la tache n°$i est très importante');
+             $task -> setTitle('tache n°'.$i);
+             $task -> setContent('la tache n°'.$i.' est très importante');
              $task -> setCreatedAt(new DateTime());
              if($i < rand(1,8)) {
                  $task -> setUser($this->getReference('camile'));
