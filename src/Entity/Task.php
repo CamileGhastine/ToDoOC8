@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=TaskRepository::class)
+ * @ORM\Entity
  * @ORM\Table
  */
 class Task
@@ -46,10 +46,11 @@ class Task
      */
     private $user;
 
-    public function __construct()
+    public function __construct($user = null)
     {
         $this->createdAt = new Datetime();
         $this->isDone = false;
+        $this->user = $user;
     }
 
     public function getId()
