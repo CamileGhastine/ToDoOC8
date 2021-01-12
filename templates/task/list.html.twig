@@ -9,11 +9,14 @@
         <div class="col-sm-4 col-lg-4 col-md-4">
             <div class="thumbnail">
                 <div class="caption">
+                    {% set user = task.user == false ? 'Anonyme' : task.user.username  %}
                     <h4 class="pull-right">
-                        {% if task.isDone %}<span class="glyphicon glyphicon-ok"></span>{% else %}<span class="glyphicon glyphicon-remove"></span>{% endif %}
+                        {% if task.isDone %} <span class="glyphicon glyphicon-ok"></span>{% else %}<span class="glyphicon glyphicon-remove"></span>{% endif %}
+
                     </h4>
-                    <h4><a href="{{ path('task_edit', {'id' : task.id }) }}">{{ task.title }}</a></h4>
+                    <h4><a href="{{ path('task_edit', {'id' : task.id }) }}">{{ task.title }}</a> (<small><em>crée par {{ user }}</em> </small>)</h4>
                     <p>{{ task.content }}</p>
+
                 </div>
                 <div>
                     <form action="{{ path('task_toggle', {'id' : task.id }) }}">
