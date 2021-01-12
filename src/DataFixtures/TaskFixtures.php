@@ -17,17 +17,35 @@ class TaskFixtures extends Fixture implements dependentFixtureInterface
 
              $task = new Task();
 
+             /** @var User $user */
+             $user = $this->getUser();
+
              $task -> setTitle('tache n°'.$i);
              $task -> setContent('la tache n°'.$i.' est très importante');
              $task -> setCreatedAt(new DateTime());
-             if($i < rand(1,8)) {
-                 $task -> setUser($this->getReference('camile'));
+             if($user) {
+                 $task -> setUser($user);
              }
 
              $manager->persist($task);
         }
 
         $manager->flush();
+    }
+
+    /**
+     * @return bool|object
+     */
+    public function getUser ()
+    {
+        $arrayName = ['Admin', 'camile', null];
+        $name = $arrayName[rand(0,2)];
+
+        if (!$name) {
+            return false;
+        }
+
+        return $this->getReference($name);
     }
 
     /**
