@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="fe25c146-4dd4-494d-a9d7-bacdd33d2d7b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Memo.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Memo.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/TaskController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TaskController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Task.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Task.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +124,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="TERMINAL_CUSTOM_COMMANDS_GOT_IT" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../SnowTricksP6-main" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/Repository" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="vcs.Mercurial" />
   </component>
@@ -153,6 +153,13 @@
       <workItem from="1608039599405" duration="6672000" />
       <workItem from="1608046475301" duration="20443000" />
       <workItem from="1608703657086" duration="55000" />
+      <workItem from="1608707290439" duration="939000" />
+      <workItem from="1610138029125" duration="809000" />
+      <workItem from="1610176806399" duration="3326000" />
+      <workItem from="1610192970720" duration="1191000" />
+      <workItem from="1610381807066" duration="704000" />
+      <workItem from="1610384034427" duration="1622000" />
+      <workItem from="1610445490952" duration="2703000" />
     </task>
     <servers />
   </component>
@@ -160,6 +167,12 @@
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="-1003" y="404" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1610381991561">
+      <screen x="-1366" y="304" width="1366" height="728" />
+    </state>
+    <state x="510" y="143" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/-1366.304.1366.728/0.0.1920.1040/1920.0.1280.984@0.0.1920.1040" timestamp="1610192164479" />
+    <state x="-1003" y="404" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/-1366.304.1366.728/1920.0.1280.984/0.0.1920.1040@-1366.304.1366.728" timestamp="1610381991561" />
+    <state x="363" y="100" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1366.728@0.0.1366.728" timestamp="1610176263316" />
     <state x="620" y="41" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1608067079449">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
