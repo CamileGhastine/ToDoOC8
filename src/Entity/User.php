@@ -70,6 +70,8 @@ class User implements UserInterface
     public function setUsername($username)
     {
         $this->username = $username;
+
+        return $this;
     }
 
     public function getSalt()
@@ -85,6 +87,8 @@ class User implements UserInterface
     public function setPassword($password)
     {
         $this->password = $password;
+
+        return $this;
     }
 
     public function getEmail()
@@ -95,6 +99,8 @@ class User implements UserInterface
     public function setEmail($email)
     {
         $this->email = $email;
+
+        return $this;
     }
 
 
