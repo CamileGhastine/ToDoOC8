@@ -38,8 +38,11 @@
         <!-- Page Content -->
         <div class="container">
             <div class="row">
-                <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
 
+                {% set userRole = app.user == true ? app.user.role : false %}
+                {% if userRole == 'ROLE_ADMIN' %}
+                    <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
+                {% endif %}
                 {% if app.user %}
                 <a href="{{ path('logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
                 {% endif %}

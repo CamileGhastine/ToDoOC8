@@ -8,7 +8,15 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+
+/**
+ * Class UserController
+ * @package App\Controller
+ *
+ * @isGranted("ROLE_ADMIN", message="Vous devez être connecté pour accéder à cette page ! ")
+ */
 class UserController extends AbstractController
 {
     /**
