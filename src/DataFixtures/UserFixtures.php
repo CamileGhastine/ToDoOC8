@@ -28,9 +28,9 @@ class UserFixtures extends Fixture
 
         foreach ($name as $name) {
             $user = new User();
-            $user -> setUsername($name);
-            $user -> setEmail($name.'@todoco.fr');
-            $user -> setPassword($this->passwordEncoder->encodePassword($user, $name));
+            $user -> setUsername($name)
+            -> setEmail($name.'@todoco.fr')
+            -> setPassword($this->passwordEncoder->encodePassword($user, $name));
 
             if ($name === 'Admin') {
                 $user -> setRole('ROLE_ADMIN');

@@ -3,12 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\RoleType;
 use App\Form\UserType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+
+/**
+ * Class UserController
+ * @package App\Controller
+ */
 class UserController extends AbstractController
 {
     /**
@@ -16,6 +23,12 @@ class UserController extends AbstractController
      */
     public function listAction()
     {
+        $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
+
+        if( $userRole !== 'ROLE_ADMIN') {
+            return $this->redirectToRoute('login');
+        }
+
         return $this->render('user/list.html.twig', ['users' => $this->getDoctrine()->getRepository('App:User')->findAll()]);
     }
 
@@ -24,6 +37,11 @@ class UserController extends AbstractController
      */
     public function createAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
+        $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
+
+        if( $userRole !== 'ROLE_ADMIN') {
+            return $this->redirectToRoute('login');
+        }
 
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -51,13 +69,17 @@ class UserController extends AbstractController
      */
     public function editAction(User $user, Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
+        $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
+
+        if( $userRole !== 'ROLE_ADMIN') {
+            return $this->redirectToRoute('login');
+        }
+
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $passwordEncoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($password);
 
             $this->getDoctrine()->getManager()->flush();
 
