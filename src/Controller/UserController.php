@@ -14,8 +14,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 /**
  * Class UserController
  * @package App\Controller
- *
- * @isGranted("ROLE_ADMIN", message="Vous devez être connecté pour accéder à cette page ! ")
  */
 class UserController extends AbstractController
 {
@@ -24,6 +22,12 @@ class UserController extends AbstractController
      */
     public function listAction()
     {
+        $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
+
+        if( $userRole !== 'ROLE_ADMIN') {
+            return $this->redirectToRoute('login');
+        }
+
         return $this->render('user/list.html.twig', ['users' => $this->getDoctrine()->getRepository('App:User')->findAll()]);
     }
 
@@ -32,6 +36,11 @@ class UserController extends AbstractController
      */
     public function createAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
+        $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
+
+        if( $userRole !== 'ROLE_ADMIN') {
+            return $this->redirectToRoute('login');
+        }
 
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -59,6 +68,12 @@ class UserController extends AbstractController
      */
     public function editAction(User $user, Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
+        $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
+
+        if( $userRole !== 'ROLE_ADMIN') {
+            return $this->redirectToRoute('login');
+        }
+
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
