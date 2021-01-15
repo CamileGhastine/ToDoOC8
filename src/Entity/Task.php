@@ -27,6 +27,12 @@ class Task
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Vous devez saisir un titre.")
+     * @Assert\Length(
+     *     min = 2,
+     *     max = 50,
+     *     minMessage = "Le titre est trop court ({{ limit }} charactères minimum).",
+     *     maxMessage = "Le titre est trop long ({{ limit }} charactères maximum).",
+     * )
      */
     private $title;
 
