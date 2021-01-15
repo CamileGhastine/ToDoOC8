@@ -3,3 +3,4 @@ Improvement :
 - No duplicate username when register
 - Typo
 - Service HandleForm
+- constraint on entities
