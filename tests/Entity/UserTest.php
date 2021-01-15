@@ -12,7 +12,7 @@ use Symfony\Component\Validator\ConstraintViolation;
 
 class UserTest extends KernelTestCase
 {
-//    use FixturesTrait;
+    use FixturesTrait;
 
     public function getUser() {
         return (new User())
@@ -103,4 +103,17 @@ class UserTest extends KernelTestCase
             ->setUsername('?afff');
         $this->assertHasErrors(1, $user);
     }
+
+    /**
+     * Test uniqueness of username
+     */
+    public function testUniqueUsername() {
+        $user = ($this->getUser())
+            ->setUsername('Admin');
+
+        $this->loadFixtures([UserFixtures::class]);
+        $this->assertHasErrors(1, $user);
+    }
+
+
 }
