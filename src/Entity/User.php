@@ -27,6 +27,13 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=25, unique=true)
      * @Assert\NotBlank(message="Vous devez saisir un nom d'utilisateur.")
+     * @Assert\Regex("/^\w+/", message="Le champs username n'a pas le bon format.")
+     * @Assert\Length(
+     *     min = 2,
+     *     max = 25,
+     *     minMessage = "Le nom d'utilisateur est trop court ({{ limit }} charactères minimum).",
+     *     maxMessage = "Le nom d'utilisateur est trop long ({{ limit }} charactères maximum).",
+     * )
      */
     private $username;
 
