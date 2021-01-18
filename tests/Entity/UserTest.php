@@ -145,4 +145,38 @@ class UserTest extends KernelTestCase
             ->setPassword('ABCDE1');
         $this->assertHasErrors(1, $user);
     }
+
+    public function testValidEmail () {
+        $user = ($this->getUser())
+            ->setEmail('username@domain.com');
+        $this->assertHasErrors(0, $user);
+    }
+
+    public function testNotBlankEmail(){
+        $user = ($this->getUser())
+            ->setEmail('');
+        $this->assertHasErrors(1, $user);
+    }
+
+    public function testFormatEmail(){
+        $user = ($this->getUser())
+            ->setEmail('username@domain');
+        $this->assertHasErrors(1, $user);
+
+        $user = ($this->getUser())
+            ->setEmail('@domain.com');
+        $this->assertHasErrors(1, $user);
+
+        $user = ($this->getUser())
+            ->setEmail('username@.com');
+        $this->assertHasErrors(1, $user);
+    }
+
+    public function testUniqueEmail() {
+        $user = ($this->getUser())
+            ->setEmail('Admin@todoco.fr');
+
+        $this->loadFixtures([UserFixtures::class]);
+        $this->assertHasErrors(1, $user);
+    }
 }
