@@ -18,7 +18,7 @@ class UserTest extends KernelTestCase
         return (new User())
             ->setUsername('username')
             ->setEmail('email@domaine.fr')
-            ->setPassword('password')
+            ->setPassword('Password1')
             ;
     }
 
@@ -36,16 +36,10 @@ class UserTest extends KernelTestCase
     }
 
 
-    /**
-     * Test valid entity
-     */
     public function testValidUser(){
         $this->assertHasErrors(0, $this->getUser());
     }
 
-    /**
-     * Test notBlank constraint on username
-     */
     public function testNotBlankUsername(){
 
         $user = ($this->getUser())
@@ -53,10 +47,6 @@ class UserTest extends KernelTestCase
         $this->assertHasErrors(2, $user);
     }
 
-
-    /**
-     * Test short username
-     */
     public function testShortUsername(){
 
         $user = ($this->getUser())
@@ -70,9 +60,6 @@ class UserTest extends KernelTestCase
 
     }
 
-    /**
-     * Test to long username constraint
-     */
     public function testLongUsername(){
 
         $username25 = '';
@@ -84,16 +71,13 @@ class UserTest extends KernelTestCase
             ->setUsername($username25.'a');
         $this->assertHasErrors(1, $user);
 
-        // Username reach limit of 50 characters
+        // Username reach limit of 25 characters
         $user = ($this->getUser())
             ->setUsername($username25);
         $this->assertHasErrors(0, $user);
     }
 
-    /**
-     * Test regex of username
-     */
-    public function testFormatUsername(){
+    public function testRegexUsername(){
 
         $user = ($this->getUser())
             ->setUsername(' afff');
@@ -104,9 +88,6 @@ class UserTest extends KernelTestCase
         $this->assertHasErrors(1, $user);
     }
 
-    /**
-     * Test uniqueness of username
-     */
     public function testUniqueUsername() {
         $user = ($this->getUser())
             ->setUsername('Admin');
@@ -115,5 +96,53 @@ class UserTest extends KernelTestCase
         $this->assertHasErrors(1, $user);
     }
 
+    public function testValidPaswword () {
+        $user = ($this->getUser())
+            ->setPassword('Abcde1');
+        $this->assertHasErrors(0, $user);
+    }
 
+    public function testNotBlankPassword(){
+        $user = ($this->getUser())
+            ->setPassword('');
+        $this->assertHasErrors(2, $user);
+    }
+
+
+    public function testShortPassword(){
+        $user = ($this->getUser())
+            ->setPassword('Abcd1');
+        $this->assertHasErrors(1, $user);
+    }
+
+    public function testLongPassword(){
+
+        $password25 = 'A1';
+        for ($i=0; $i<23; $i++) {
+            $password25.='a';
+        }
+        $user = ($this->getUser())
+            ->setPassword($password25.'a');
+        $this->assertHasErrors(1, $user);
+
+        // password reach limit of 25 characters
+        $user = ($this->getUser())
+            ->setPassword($password25);
+        $this->assertHasErrors(0, $user);
+    }
+
+    public function testRegexPassword(){
+
+        $user = ($this->getUser())
+            ->setPassword('abcde1');
+        $this->assertHasErrors(1, $user);
+
+        $user = ($this->getUser())
+            ->setPassword('Abcdef');
+        $this->assertHasErrors(1, $user);
+
+        $user = ($this->getUser())
+            ->setPassword('ABCDE1');
+        $this->assertHasErrors(1, $user);
+    }
 }

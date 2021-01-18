@@ -24,13 +24,13 @@ class UserFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
-        $name = ['Admin', 'camile'];
+        $names = ['Admin', 'Camile'];
 
-        foreach ($name as $name) {
+        foreach ($names as $name) {
             $user = new User();
             $user -> setUsername($name)
             -> setEmail($name.'@todoco.fr')
-            -> setPassword($this->passwordEncoder->encodePassword($user, $name));
+            -> setPassword($this->passwordEncoder->encodePassword($user, $name.'1'));
 
             if ($name === 'Admin') {
                 $user -> setRole('ROLE_ADMIN');

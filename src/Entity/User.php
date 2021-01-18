@@ -39,6 +39,14 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=64)
+     * @Assert\NotBlank
+     * @Assert\Regex("/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])./", message="Le mot de passe doit contenir plus de 6 avec au moins une majuscule, une minuscule et un chiffre.")
+     * @Assert\Length(
+     *     min = 6,
+     *     max = 25,
+     *     minMessage = "Le mot de passe est trop court ({{ limit }} charactères minimum).",
+     *     maxMessage = "Le mot de passe est trop long ({{ limit }} charactères maximum).",
+     * )
      */
     private $password;
 

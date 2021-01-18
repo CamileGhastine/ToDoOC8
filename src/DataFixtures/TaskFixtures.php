@@ -38,7 +38,7 @@ class TaskFixtures extends Fixture implements dependentFixtureInterface
      */
     public function getUser ()
     {
-        $arrayName = ['Admin', 'camile', null];
+        $arrayName = ['Admin', 'Camile', null];
         $name = $arrayName[rand(0,2)];
 
         if (!$name) {
