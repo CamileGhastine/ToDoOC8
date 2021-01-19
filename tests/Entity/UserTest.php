@@ -32,7 +32,7 @@ class UserTest extends KernelTestCase
             $messages[] = $error->getPropertyPath().' => '. $error->getMessage();
         }
 
-        $this->assertCount($number, $errors, implode(' - ', $messages));
+        static::assertCount($number, $errors, implode(' - ', $messages));
     }
 
 

@@ -35,7 +35,7 @@ class TaskTest extends KernelTestCase
      * Test valid entity
      */
     public function testValidTask(){
-        $this->assertHasErrors(0, $this->getTask());
+        static::assertHasErrors(0, $this->getTask());
     }
 
     /**
@@ -45,7 +45,7 @@ class TaskTest extends KernelTestCase
 
         $task = ($this->getTask())
             ->setTitle('');
-        $this->assertHasErrors(2, $task);
+        static::assertHasErrors(2, $task);
     }
 
 
@@ -61,7 +61,7 @@ class TaskTest extends KernelTestCase
         // Title just long enough (2 characters)
         $task = ($this->getTask())
             ->setTitle('ab');
-        $this->assertHasErrors(0, $task);
+        static::assertHasErrors(0, $task);
 
     }
 
@@ -82,7 +82,7 @@ class TaskTest extends KernelTestCase
         // Title reach limit of 50 characters
         $task = ($this->getTask())
             ->setTitle($title50);
-        $this->assertHasErrors(0, $task);
+        static::assertHasErrors(0, $task);
     }
 
     /**
@@ -92,7 +92,7 @@ class TaskTest extends KernelTestCase
 
         $task = ($this->getTask())
             ->setContent('');
-        $this->assertHasErrors(1, $task);
+        static::assertHasErrors(1, $task);
     }
 
     /**
@@ -100,7 +100,7 @@ class TaskTest extends KernelTestCase
      */
     public function testIsDoneFalse() {
         $task = $this->getTask();
-        $this->assertSame(false, $task->isDone());
+        static::assertSame(false, $task->isDone());
     }
 
     /**
@@ -109,7 +109,7 @@ class TaskTest extends KernelTestCase
     public function testInstanceOfUser() {
         $task = ($this->getTask())
             ->setUser(new User());
-        $this->assertHasErrors(0, $task);
+        static::assertHasErrors(0, $task);
     }
 
     /**
@@ -118,6 +118,6 @@ class TaskTest extends KernelTestCase
     public function testNullUser() {
         $task = ($this->getTask())
             ->setUser(null);
-        $this->assertHasErrors(0, $task);
+        static::assertHasErrors(0, $task);
     }
 }

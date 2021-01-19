@@ -27,14 +27,15 @@ class SecurityControllerTest extends WebTestCase
 
     public function testLoginFormDisplay(){
         $crawler = $this->client->request('GET', '/login');
-        static::assertSelectorExists('form');
-        static::assertSame(2, $crawler->filter('input')->count());
-        static::assertSame(1, $crawler->filter('label:contains("Nom d\'utilisateur :")')->count());
-        static::assertSame(1, $crawler->filter('label:contains("Mot de passe :")')->count());
-        static::assertSelectorTextSame('button', 'Se connecter');
+        static::assertSelectorExists('form', 'No <Form>');
+        static::assertSame(2, $crawler->filter('input')->count(), 'Count <input> != 2');
+        static::assertSame(1, $crawler->filter('label:contains("Nom d\'utilisateur :")')->count(), 'No <label> for username');
+        static::assertSame(1, $crawler->filter('label:contains("Mot de passe :")')->count(), 'No <label> for password');
+        static::assertSelectorTextSame('button', 'Se connecter', 'No button <submit> Se connecter');
     }
 
     public function testLoginFormSubmitSuccess() {
+        $this->loadFixtures([UserFixtures::class]);
         $this->submitForm('Camile', 'Camile1');
 
         static::assertSelectorTextContains('h1', 'Bienvenue sur Todo List, l\'application vous permettant de gérer l\'ensemble de vos tâches sans effort !');
@@ -44,15 +45,14 @@ class SecurityControllerTest extends WebTestCase
     public function testLoginFormSubmitFailure() {
         $this->submitForm('Camile', 'wrong password');
 
-        static::assertSelectorTextContains('.alert.alert-danger', 'Identifiants invalides.');
-        static::assertInputValueSame('_username', 'Camile');
+        static::assertSelectorTextContains('.alert.alert-danger', 'Identifiants invalides.', 'No class alert and alert-danger');
+        static::assertInpugotValueSame('_username', 'Camile', 'No expected input value');
 //        static::assertResponseRedirects('/login');
 
     }
 
     private function submitForm($username, $password) {
         $crawler = $this->client->request('GET', '/login');
-
         $form = $crawler->selectButton('Se connecter')->form([
             '_username' => $username,
             '_password' => $password
