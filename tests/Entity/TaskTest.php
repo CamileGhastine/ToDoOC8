@@ -10,14 +10,14 @@ use Symfony\Component\Validator\ConstraintViolation;
 
 class TaskTest extends KernelTestCase
 {
-    public function getTask() : Task {
+    private function getTask() : Task {
         return (new Task())
             ->setTitle('Title')
             ->setContent('Content')
             ;
     }
 
-    public function assertHasErrors(int $number, Task $task) {
+    private function assertHasErrors(int $number, Task $task) {
         self::bootKernel();
         $errors = self::$container->get('validator')->validate($task);
 

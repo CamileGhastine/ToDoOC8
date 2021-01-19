@@ -14,7 +14,7 @@ class UserTest extends KernelTestCase
 {
     use FixturesTrait;
 
-    public function getUser() {
+    private function getUser() {
         return (new User())
             ->setUsername('username')
             ->setEmail('email@domaine.fr')
@@ -22,7 +22,7 @@ class UserTest extends KernelTestCase
             ;
     }
 
-    public function assertHasErrors(int $number, $user) {
+    private function assertHasErrors(int $number, $user) {
         self::bootKernel();
         $errors = self::$container->get('validator')->validate($user);
 
