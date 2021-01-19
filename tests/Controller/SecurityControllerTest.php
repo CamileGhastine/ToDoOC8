@@ -35,7 +35,8 @@ class SecurityControllerTest extends WebTestCase
     }
 
     public function testLoginFormSubmitSuccess() {
-        $this->loadFixtures([UserFixtures::class]);
+//        $this->loadFixtures([UserFixtures::class]);
+        $this->loadFixtureFiles([__DIR__ . '/userFixture.yaml']);
         $this->submitForm('Camile', 'Camile1');
 
         static::assertSelectorTextContains('h1', 'Bienvenue sur Todo List, l\'application vous permettant de gérer l\'ensemble de vos tâches sans effort !');
@@ -46,7 +47,7 @@ class SecurityControllerTest extends WebTestCase
         $this->submitForm('Camile', 'wrong password');
 
         static::assertSelectorTextContains('.alert.alert-danger', 'Identifiants invalides.', 'No class alert and alert-danger');
-        static::assertInpugotValueSame('_username', 'Camile', 'No expected input value');
+        static::assertInputValueSame('_username', 'Camile', 'No expected input value');
 //        static::assertResponseRedirects('/login');
 
     }
