@@ -9,17 +9,8 @@ use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class SecurityControllerTest extends WebTestCase
+class SecurityControllerTest extends ControllerTest
 {
-    use FixturesTrait;
-
-    private $client;
-
-    public function setUp()
-    {
-        $this->client = static::createClient();
-    }
-
     public function testLoginPageStatusCode() {
         $this->client->request('GET', '/login');
         static::assertResponseStatusCodeSame(Response::HTTP_OK);
