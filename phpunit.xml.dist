@@ -26,7 +26,9 @@
             <directory suffix=".php">src</directory>
         </whitelist>
     </filter>
-
+    <logging>
+        <log type="coverage-text" target="php://stdout"/>
+    </logging>
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
     </listeners>
