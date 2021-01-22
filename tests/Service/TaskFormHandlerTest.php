@@ -5,11 +5,11 @@ namespace App\Tests\Service;
 
 
 use App\Entity\Task;
-use App\Service\HandleForm;
+use App\Service\TaskFormHandler;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class HandleFormTest extends TestCase
+class TaskFormHandlerTest extends TestCase
 {
     private $form;
     private $em;
@@ -54,7 +54,7 @@ class HandleFormTest extends TestCase
     private function handle(?Task $task = null, ?bool $submitted = null, ?bool $valid = null){
         $this->setFormMethods($task, $submitted, $valid);
 
-        $handleForm = new HandleForm($this->em);
+        $handleForm = new TaskFormHandler($this->em);
         return $handleForm->handle($this->request, $this->form, $task);
     }
 

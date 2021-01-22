@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
-use App\Service\HandleForm;
+use App\Service\TaskFormHandler;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +27,7 @@ class TaskController extends AbstractController
      *
      * @param Form $form
      */
-    public function createAction(Request $request, HandleForm $handleForm)
+    public function createAction(Request $request, TaskFormHandler $handleForm)
     {
         $task = new Task($this->getUser());
         /** @var Form $form */
@@ -48,11 +48,11 @@ class TaskController extends AbstractController
      *
      * @param Request $request
      * @param Task $task
-     * @param HandleForm $handleForm
+     * @param TaskFormHandler $handleForm
      *
      * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, Task $task, HandleForm $handleForm)
+    public function editAction(Request $request, Task $task, TaskFormHandler $handleForm)
     {
         /** @var Form $form */
         $form = $this->createForm(TaskType::class, $task);
