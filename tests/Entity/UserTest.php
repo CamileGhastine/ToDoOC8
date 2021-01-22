@@ -3,7 +3,6 @@
 
 namespace App\Tests\Entity;
 
-
 use App\DataFixtures\UserFixtures;
 use App\Entity\User;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
@@ -14,7 +13,8 @@ class UserTest extends KernelTestCase
 {
     use FixturesTrait;
 
-    private function getUser() {
+    private function getUser()
+    {
         return (new User())
             ->setUsername('username')
             ->setEmail('email@domaine.fr')
@@ -22,7 +22,8 @@ class UserTest extends KernelTestCase
             ;
     }
 
-    private function assertHasErrors(int $number, $user) {
+    private function assertHasErrors(int $number, $user)
+    {
         self::bootKernel();
         $errors = self::$container->get('validator')->validate($user);
 
@@ -36,19 +37,20 @@ class UserTest extends KernelTestCase
     }
 
 
-    public function testValidUser(){
+    public function testValidUser()
+    {
         $this->assertHasErrors(0, $this->getUser());
     }
 
-    public function testNotBlankUsername(){
-
+    public function testNotBlankUsername()
+    {
         $user = ($this->getUser())
             ->setUsername('');
         $this->assertHasErrors(2, $user);
     }
 
-    public function testShortUsername(){
-
+    public function testShortUsername()
+    {
         $user = ($this->getUser())
             ->setUsername('a');
         $this->assertHasErrors(1, $user);
@@ -57,11 +59,10 @@ class UserTest extends KernelTestCase
         $user = ($this->getUser())
             ->setUsername('ab');
         $this->assertHasErrors(0, $user);
-
     }
 
-    public function testLongUsername(){
-
+    public function testLongUsername()
+    {
         $username25 = '';
         for ($i=0; $i<25; $i++) {
             $username25.='a';
@@ -77,8 +78,8 @@ class UserTest extends KernelTestCase
         $this->assertHasErrors(0, $user);
     }
 
-    public function testRegexUsername(){
-
+    public function testRegexUsername()
+    {
         $user = ($this->getUser())
             ->setUsername(' afff');
         $this->assertHasErrors(1, $user);
@@ -88,7 +89,8 @@ class UserTest extends KernelTestCase
         $this->assertHasErrors(1, $user);
     }
 
-    public function testUniqueUsername() {
+    public function testUniqueUsername()
+    {
         $user = ($this->getUser())
             ->setUsername('Admin');
 
@@ -96,27 +98,30 @@ class UserTest extends KernelTestCase
         $this->assertHasErrors(1, $user);
     }
 
-    public function testValidPaswword () {
+    public function testValidPaswword()
+    {
         $user = ($this->getUser())
             ->setPassword('Abcde1');
         $this->assertHasErrors(0, $user);
     }
 
-    public function testNotBlankPassword(){
+    public function testNotBlankPassword()
+    {
         $user = ($this->getUser())
             ->setPassword('');
         $this->assertHasErrors(2, $user);
     }
 
 
-    public function testShortPassword(){
+    public function testShortPassword()
+    {
         $user = ($this->getUser())
             ->setPassword('Abcd1');
         $this->assertHasErrors(1, $user);
     }
 
-    public function testLongPassword(){
-
+    public function testLongPassword()
+    {
         $password25 = 'A1';
         for ($i=0; $i<23; $i++) {
             $password25.='a';
@@ -131,8 +136,8 @@ class UserTest extends KernelTestCase
         $this->assertHasErrors(0, $user);
     }
 
-    public function testRegexPassword(){
-
+    public function testRegexPassword()
+    {
         $user = ($this->getUser())
             ->setPassword('abcde1');
         $this->assertHasErrors(1, $user);
@@ -146,19 +151,22 @@ class UserTest extends KernelTestCase
         $this->assertHasErrors(1, $user);
     }
 
-    public function testValidEmail () {
+    public function testValidEmail()
+    {
         $user = ($this->getUser())
             ->setEmail('username@domain.com');
         $this->assertHasErrors(0, $user);
     }
 
-    public function testNotBlankEmail(){
+    public function testNotBlankEmail()
+    {
         $user = ($this->getUser())
             ->setEmail('');
         $this->assertHasErrors(1, $user);
     }
 
-    public function testFormatEmail(){
+    public function testFormatEmail()
+    {
         $user = ($this->getUser())
             ->setEmail('username@domain');
         $this->assertHasErrors(1, $user);
@@ -172,7 +180,8 @@ class UserTest extends KernelTestCase
         $this->assertHasErrors(1, $user);
     }
 
-    public function testUniqueEmail() {
+    public function testUniqueEmail()
+    {
         $user = ($this->getUser())
             ->setEmail('Admin@todoco.fr');
 

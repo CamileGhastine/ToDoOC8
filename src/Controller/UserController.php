@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-
 /**
  * Class UserController
  * @package App\Controller
@@ -25,7 +24,7 @@ class UserController extends AbstractController
     {
         $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
 
-        if( $userRole !== 'ROLE_ADMIN') {
+        if ($userRole !== 'ROLE_ADMIN') {
             return $this->redirectToRoute('login');
         }
 
@@ -39,7 +38,7 @@ class UserController extends AbstractController
     {
         $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
 
-        if( $userRole !== 'ROLE_ADMIN') {
+        if ($userRole !== 'ROLE_ADMIN') {
             return $this->redirectToRoute('login');
         }
 
@@ -71,7 +70,7 @@ class UserController extends AbstractController
     {
         $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
 
-        if( $userRole !== 'ROLE_ADMIN') {
+        if ($userRole !== 'ROLE_ADMIN') {
             return $this->redirectToRoute('login');
         }
 
@@ -80,7 +79,6 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");

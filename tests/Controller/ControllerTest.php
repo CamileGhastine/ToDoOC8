@@ -3,7 +3,6 @@
 
 namespace App\Tests\Controller;
 
-
 use App\DataFixtures\UserFixtures;
 use App\Entity\User;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
@@ -11,6 +10,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ControllerTest extends WebTestCase
 {
     use FixturesTrait;
@@ -38,4 +40,8 @@ class ControllerTest extends WebTestCase
         $this->client->getCookieJar()->set($cookie);
     }
 
+    public function testToAvoidWarning()
+    {
+        static::assertSame(1, 1);
+    }
 }
