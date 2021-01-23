@@ -11,17 +11,5 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class TaskControllerTest extends ControllerTest
 {
-    public function testHomePageIsRestricted()
-    {
-        $this->client->request('GET', '/');
-        static::assertResponseStatusCodeSame(Response::HTTP_FOUND);
-        //        static::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
-    }
 
-    public function testHomePageAccessibleToUser()
-    {
-        $this->createLogin();
-        $this->client->request('GET', '/');
-        static::assertResponseStatusCodeSame(200);
-    }
 }
