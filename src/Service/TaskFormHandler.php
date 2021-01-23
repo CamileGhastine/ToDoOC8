@@ -21,7 +21,7 @@ class TaskFormHandler
         $this->flash = $flash;
     }
 
-    public function handle(Request $request, Form $form, Task $task = null): bool
+    public function handle(Request $request, Form $form, Task $task): bool
     {
         $form->handleRequest($request);
 
