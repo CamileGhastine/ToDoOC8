@@ -33,9 +33,7 @@ class TaskController extends AbstractController
         /** @var Form $form */
         $form = $this->createForm(TaskType::class, $task);
 
-        $form = $handleForm->handle($request, $form, $task);
-        if (!$form) {
-            $this->addFlash('success', 'La tâche a bien été  ajoutée.');
+        if ($handleForm->handle($request, $form, $task)) {
 
             return $this->redirectToRoute('task_list');
         }
@@ -57,10 +55,7 @@ class TaskController extends AbstractController
         /** @var Form $form */
         $form = $this->createForm(TaskType::class, $task);
 
-        $form = $handleForm->handle($request, $form, $task);
-        if (!$form) {
-            $this->addFlash('success', 'La tâche a été modifiée avec succès.');
-
+        if ($handleForm->handle($request, $form, $task)) {
             return $this->redirectToRoute('task_list');
         }
 
