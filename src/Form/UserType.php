@@ -16,37 +16,49 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder
+            ->add('username', TextType::class, ['label' => "Nom d'utilisateur"]);
+
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            $product = $event->getData();
+            $user = $event->getData();
             $form = $event->getForm();
 
             // checks if the Product object is "new"
             // If no data is passed to the form, the data is "null".
             // This should be considered a new "Product"
-            if (!$product || null === $product->getId()) {
-                $form->add('username', TextType::class, ['label' => "Nom d'utilisateur"])
-                    ->add('password', RepeatedType::class, [
+            if (!$user || null === $user->getId()) {
+                $form->add('password', RepeatedType::class, [
                         'type' => PasswordType::class,
                         'invalid_message' => 'Les deux mots de passe doivent correspondre.',
                         'required' => true,
                         'first_options'  => ['label' => 'Mot de passe'],
                         'second_options' => ['label' => 'Tapez le mot de passe à nouveau'],
                     ])
-                    ->add('email', EmailType::class, ['label' => 'Adresse email'])
+
                 ;
             }
         });
 
         $builder
-            ->add('role', ChoiceType::class, [
-                'choices'  => [
-                    'Utilisateur' => 'ROLE_USER',
-                    'Administrateur' => 'ROLE_ADMIN'
-                ],
-                'expanded' => true,
-                'multiple' => false,
-                'label' => 'Rôle'
-            ])
-        ;
+            ->add('email', EmailType::class, ['label' => 'Adresse email']);
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $user = $event->getData();
+            $form = $event->getForm();
+
+            // checks if the Product object exists
+            if ($user && $user->getId()) {
+                $form->add('role', ChoiceType::class, [
+                    'choices'  => [
+                        'Utilisateur' => 'ROLE_USER',
+                        'Administrateur' => 'ROLE_ADMIN'
+                    ],
+                    'expanded' => true,
+                    'multiple' => false,
+                    'label' => 'Rôle'
+                ])
+                ;
+            }
+        });
     }
 }

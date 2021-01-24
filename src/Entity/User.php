@@ -43,7 +43,7 @@ class User implements UserInterface
      * @Assert\Regex("/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])./", message="Le mot de passe doit contenir plus de 6 avec au moins une majuscule, une minuscule et un chiffre.")
      * @Assert\Length(
      *     min = 6,
-     *     max = 25,
+     *     max = 100,
      *     minMessage = "Le mot de passe est trop court ({{ limit }} charactères minimum).",
      *     maxMessage = "Le mot de passe est trop long ({{ limit }} charactères maximum).",
      * )
