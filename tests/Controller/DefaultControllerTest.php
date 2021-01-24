@@ -12,14 +12,14 @@ class DefaultControllerTest extends ControllerTest
     {
         $this->client->request('GET', '/');
 
-        static::assertResponseRedirects('/login', 302);
+        static::assertResponseRedirects('/login', Response::HTTP_FOUND);
     }
 
     public function testHomePageAccessibleToUser()
     {
         $this->createLogin();
         $this->client->request('GET', '/');
-        static::assertResponseStatusCodeSame(200);
+        static::assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     public function testHomePageView(){

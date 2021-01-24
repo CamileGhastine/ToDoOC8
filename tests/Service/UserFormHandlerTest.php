@@ -4,18 +4,19 @@
 namespace App\Tests\Service;
 
 
-use App\Entity\Task;
-use App\Service\TaskFormHandler;
+use App\Entity\User;
+use App\Service\UserFormHandler;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class TaskFormHandlerTest extends KernelTestCase
+class UserFormHandlerTest extends KernelTestCase
 {
     use FixturesTrait;
 
     private $form;
     private $em;
+    private $passwordEncoder;
     private $flash;
     private $request;
 
@@ -29,6 +30,9 @@ class TaskFormHandlerTest extends KernelTestCase
         $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManagerInterface')
             ->getMock();
 
+        $this->passwordEncoder = $this->getMockBuilder('Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface')
+            ->getMock();
+
         $this->flash = $this->getMockBuilder('Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface')
             ->getMock();
 
@@ -37,53 +41,57 @@ class TaskFormHandlerTest extends KernelTestCase
 
     public function testHandleFormReturnFalseWhenFormIsNotSubmitted()
     {
-        $result = $this->handle(new Task(), false, false);
+        $result = $this->handle(new User(), false, false);
 
         $this->assertSame(false, $result);
     }
 
     public function testHandleFormReturnFalseWhenFormIsSubmittedAndNotValid()
     {
-        $result = $this->handle(new Task(), true, false);
+        $result = $this->handle(new User(), true, false);
 
         $this->assertSame(false, $result);
     }
 
     public function testHandleFormReturnTrueWhenCreateFormIsSubmittedAndValid()
     {
-        $result = $this->handle(new Task(), true, true);
+        $user = (new User())->setPassword('password');
+        $result = $this->handle($user, true, true);
 
+        $this->assertNotSame('password', $user->getPassword());
         $this->assertSame(true, $result);
     }
 
     public function testHandleFormReturnTrueWhenEditFormIsSubmittedAndValid()
     {
-        $task = $this->getMockBuilder('App\Entity\Task')->setMethods(['getId'])->getMock();
-        $task->method('getId')->willReturn(1);
+        $user = $this->getMockBuilder('App\Entity\User')->setMethods(['getId'])->getMock();
+        $user->method('getId')->willReturn(1);
 
-        $result = $this->handle($task, true, true);
+        $result = $this->handle($user, true, true);
 
         $this->assertSame(true, $result);
     }
 
 
-    private function handle(Task $task, ?bool $submitted = null, ?bool $valid = null): bool
+    private function handle(User $user, ?bool $submitted = null, ?bool $valid = null): bool
     {
-        $this->setFormMethods($task, $submitted, $valid);
+        $this->setFormMethods($user, $submitted, $valid);
 
-        $handleForm = new TaskFormHandler($this->em, $this->flash);
-        return $handleForm->handle($this->request, $this->form, $task);
+        $handleForm = new UserFormHandler($this->em, $this->passwordEncoder, $this->flash);
+        return $handleForm->handle($this->request, $this->form, $user);
     }
 
-    private function setFormMethods(Task $task, ?bool $submitted = null, ?bool $valid = null)
+    private function setFormMethods(User $user, ?bool $submitted = null, ?bool $valid = null)
     {
         $submittedTrue = $submitted ? 'once' : 'never';
         $submittedValidTrue = $submitted && $valid ? 'once' : 'never';
-        $submittedValidCreateForm = $submitted && $valid && !$task->getId() ? 'once' : 'never';
-        $flashMessage = $submitted && $valid && !$task->getId() ? 'ajoutée' : 'modifiée';
+        $submittedValidCreateForm = $submitted && $valid && !$user->getId() ? 'once' : 'never';
+        $flashMessage = $submitted && $valid && !$user->getId() ? 'ajouté' : 'modifié';
 
         $this->em->expects($this->$submittedValidCreateForm())->method('persist');
         $this->em->expects($this->$submittedValidTrue())->method('flush');
+
+        $this->passwordEncoder->expects($this->$submittedValidCreateForm())->method('encodePassword');
 
         $this->flash->expects($this->$submittedValidTrue())
             ->method('add')

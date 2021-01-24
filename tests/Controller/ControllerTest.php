@@ -39,8 +39,10 @@ class ControllerTest extends WebTestCase
         $cookie = new Cookie($session->getName(), $session->getId());
         $this->client->getCookieJar()->set($cookie);
     }
-
-    public function testToAvoidWarning()
+    /**
+     * @codeCoverageIgnore
+     */
+    public function testToAvoidWarningWhenTesting()
     {
         static::assertSame(1, 1);
     }
