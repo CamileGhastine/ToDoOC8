@@ -4,14 +4,7 @@ Improvement :
 - Typo
 - Service HandleForm
 - constraint on entities
-
-
-
-
-
-
-
-
+- Authorisation
 
 - delete user
 - pagination

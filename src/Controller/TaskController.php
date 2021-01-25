@@ -19,6 +19,10 @@ class TaskController extends AbstractController
      */
     public function listAction(): Response
     {
+        if (!$this->verifyRole()) {
+            return $this->redirectToRoute('login');
+        }
+
         return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findAll()]);
     }
 
@@ -31,6 +35,10 @@ class TaskController extends AbstractController
      */
     public function createAction(Request $request, TaskFormHandler $handleForm)
     {
+        if (!$this->verifyRole()) {
+            return $this->redirectToRoute('login');
+        }
+
         $task = new Task($this->getUser());
         /** @var Form $form */
         $form = $this->createForm(TaskType::class, $task);
@@ -54,6 +62,10 @@ class TaskController extends AbstractController
      */
     public function editAction(Request $request, Task $task, TaskFormHandler $handleForm)
     {
+        if (!$this->verifyRole()) {
+            return $this->redirectToRoute('login');
+        }
+
         /** @var Form $form */
         $form = $this->createForm(TaskType::class, $task);
 
@@ -74,6 +86,10 @@ class TaskController extends AbstractController
      */
     public function toggleTaskAction(Task $task): RedirectResponse
     {
+        if (!$this->verifyRole()) {
+            return $this->redirectToRoute('login');
+        }
+
         $task->toggle(!$task->isDone());
         $this->getDoctrine()->getManager()->flush();
 
@@ -89,6 +105,10 @@ class TaskController extends AbstractController
      */
     public function deleteTaskAction(Task $task): RedirectResponse
     {
+        if(!$this->getUser() || $this->getUser()->getId() !== $task->getUser()) {
+            return $this->redirectToRoute('task_list');
+        }
+
         $em = $this->getDoctrine()->getManager();
         $em->remove($task);
         $em->flush();
@@ -96,5 +116,12 @@ class TaskController extends AbstractController
         $this->addFlash('success', 'La tâche a été supprimée avec succès.');
 
         return $this->redirectToRoute('task_list');
+    }
+
+    private function VerifyRole()
+    {
+        $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
+
+        return $userRole;
     }
 }
