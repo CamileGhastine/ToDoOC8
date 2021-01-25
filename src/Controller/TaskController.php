@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class TaskController extends AbstractController
 {
@@ -94,10 +95,14 @@ class TaskController extends AbstractController
      * @param Task $task
      * @return RedirectResponse
      */
-    public function toggleTaskAction(Task $task): RedirectResponse
+    public function toggleTaskAction(Request $request, Task $task): RedirectResponse
     {
         if (!$this->verifyRole()) {
             return $this->redirectToRoute('login');
+        }
+
+        if (!$request->request->get('_token') || $tokenManager->getToken('delete'.$task->getId())->getValue() !== $request->request->get('_token')) {
+            return $this->redirectToRoute('logout');
         }
 
         $task->toggle(!$task->isDone());
@@ -113,10 +118,14 @@ class TaskController extends AbstractController
      * @param Task $task
      * @return RedirectResponse
      */
-    public function deleteTaskAction(Task $task): RedirectResponse
+    public function deleteTaskAction(Task $task, Request $request, CsrfTokenManagerInterface $tokenManager): RedirectResponse
     {
-        if(!$this->getUser() || $this->getUser()->getId() !== $task->getUser()) {
+        if(!$this->getUser() || $this->getUser()->getId() !== $task->getUser()->getId()) {
             return $this->redirectToRoute('task_list');
+        }
+
+        if (!$request->request->get('_token') || $tokenManager->getToken('delete'.$task->getId())->getValue() !== $request->request->get('_token')) {
+            return $this->redirectToRoute('logout');
         }
 
         $em = $this->getDoctrine()->getManager();

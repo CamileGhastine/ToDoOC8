@@ -4,13 +4,13 @@ Improvement :
 - Service HandleForm
 - constraint on entities
 - Authorisation
+- token to forms
 
 - lts
 - Translation in french (title, content)
-- limited date or edited date
+
 - display chapo in tasks list
-
-
+- limited date or edited date
 - responsive
 - task isDone in ajax
 - delete user
