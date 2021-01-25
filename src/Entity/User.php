@@ -27,16 +27,31 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=25, unique=true)
      * @Assert\NotBlank(message="Vous devez saisir un nom d'utilisateur.")
+     * @Assert\Regex("/^\w+/", message="Le champs username n'a pas le bon format.")
+     * @Assert\Length(
+     *     min = 2,
+     *     max = 25,
+     *     minMessage = "Le nom d'utilisateur est trop court ({{ limit }} charactères minimum).",
+     *     maxMessage = "Le nom d'utilisateur est trop long ({{ limit }} charactères maximum).",
+     * )
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=64)
+     * @Assert\NotBlank
+     * @Assert\Regex("/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])./", message="Le mot de passe doit contenir plus de 6 avec au moins une majuscule, une minuscule et un chiffre.")
+     * @Assert\Length(
+     *     min = 6,
+     *     max = 100,
+     *     minMessage = "Le mot de passe est trop court ({{ limit }} charactères minimum).",
+     *     maxMessage = "Le mot de passe est trop long ({{ limit }} charactères maximum).",
+     * )
      */
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=60, unique=true)
+     * @ORM\Column(type="string", unique=true)
      * @Assert\NotBlank(message="Vous devez saisir une adresse email.")
      * @Assert\Email(message="Le format de l'adresse n'est pas correcte.")
      */

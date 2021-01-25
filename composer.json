@@ -35,7 +35,9 @@
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
-        "symfony/maker-bundle": "^1.25"
+        "liip/test-fixtures-bundle": "^1.11",
+        "symfony/maker-bundle": "^1.25",
+        "theofidry/alice-data-fixtures": "^1.2"
     },
     "config": {
         "optimize-autoloader": true,
@@ -69,6 +71,11 @@
             "php bin/console doctrine:database:create",
             "php bin/console doctrine:schema:update --force",
             "php bin/console doctrine:fixtures:load -n"
+        ],
+        "prepare-test": [
+            "php bin/console doctrine:database:drop --env=test --if-exists --force",
+            "php bin/console doctrine:database:create --env=test",
+            "php bin/console doctrine:schema:update --env=test --force"
         ],
         "auto-scripts": {
             "cache:clear": "symfony-cmd",

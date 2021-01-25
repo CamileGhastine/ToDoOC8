@@ -14,20 +14,19 @@ class TaskFixtures extends Fixture implements dependentFixtureInterface
     public function load(ObjectManager $manager)
     {
         for ($i=0; $i<10; $i++) {
+            $task = new Task();
 
-             $task = new Task();
+            /** @var User $user */
+            $user = $this->getUser();
 
-             /** @var User $user */
-             $user = $this->getUser();
+            $task -> setTitle('tache n°'.$i);
+            $task -> setContent('la tache n°'.$i.' est très importante');
+            $task -> setCreatedAt(new DateTime());
+            if ($user) {
+                $task -> setUser($user);
+            }
 
-             $task -> setTitle('tache n°'.$i);
-             $task -> setContent('la tache n°'.$i.' est très importante');
-             $task -> setCreatedAt(new DateTime());
-             if($user) {
-                 $task -> setUser($user);
-             }
-
-             $manager->persist($task);
+            $manager->persist($task);
         }
 
         $manager->flush();
@@ -36,10 +35,10 @@ class TaskFixtures extends Fixture implements dependentFixtureInterface
     /**
      * @return bool|object
      */
-    public function getUser ()
+    public function getUser()
     {
-        $arrayName = ['Admin', 'camile', null];
-        $name = $arrayName[rand(0,2)];
+        $arrayName = ['Admin', 'Camile', null];
+        $name = $arrayName[rand(0, 2)];
 
         if (!$name) {
             return false;

@@ -1,0 +1,6 @@
+App\Entity\User:
+  userCamile:
+    username: "Camile"
+    email: <email()>
+    password: "\\$2y$10\\$dFV8QDIBphcb.EJendwreusBhVvUUx38BMojvSah/jz1JTYuKA5Dq"
+    role: "ROLE_USER"

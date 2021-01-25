@@ -3,14 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\RoleType;
 use App\Form\UserType;
+use App\Service\UserFormHandler;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-
 
 /**
  * Class UserController
@@ -25,7 +25,7 @@ class UserController extends AbstractController
     {
         $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
 
-        if( $userRole !== 'ROLE_ADMIN') {
+        if ($userRole !== 'ROLE_ADMIN') {
             return $this->redirectToRoute('login');
         }
 
@@ -34,31 +34,19 @@ class UserController extends AbstractController
 
     /**
      * @Route("/users/create", name="user_create")
+     * @param Request $request
+     * @param UserFormHandler $userFormHandler
+     * @return RedirectResponse|Response
      */
-    public function createAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function createAction(Request $request, UserFormHandler $userFormHandler)
     {
-        $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
-
-        if( $userRole !== 'ROLE_ADMIN') {
-            return $this->redirectToRoute('login');
-        }
-
         $user = new User();
+
+        /** @var Form $form */
         $form = $this->createForm(UserType::class, $user);
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $password = $passwordEncoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($password);
-
-            $em->persist($user);
-            $em->flush();
-
-            $this->addFlash('success', "L'utilisateur a bien été ajouté.");
-
-            return $this->redirectToRoute('user_list');
+        if($userFormHandler->handle($request, $form, $user)) {
+            return $this->redirectToRoute('login');
         }
 
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
@@ -66,25 +54,23 @@ class UserController extends AbstractController
 
     /**
      * @Route("/users/{id}/edit", name="user_edit")
+     * @param User $user
+     * @param Request $request
+     * @param UserFormHandler $userFormHandler
+     * @return RedirectResponse|Response
      */
-    public function editAction(User $user, Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function editAction(User $user, Request $request, UserFormHandler $userFormHandler)
     {
         $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
 
-        if( $userRole !== 'ROLE_ADMIN') {
+        if ($userRole !== 'ROLE_ADMIN') {
             return $this->redirectToRoute('login');
         }
 
+        /** @var Form $form */
         $form = $this->createForm(UserType::class, $user);
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $this->getDoctrine()->getManager()->flush();
-
-            $this->addFlash('success', "L'utilisateur a bien été modifié");
-
+        if($userFormHandler->handle($request, $form, $user)) {
             return $this->redirectToRoute('user_list');
         }
 

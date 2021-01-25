@@ -3,3 +3,16 @@ Improvement :
 - No duplicate username when register
 - Typo
 - Service HandleForm
+- constraint on entities
+
+
+
+
+
+
+
+
+
+- delete user
+- pagination
+- order by
