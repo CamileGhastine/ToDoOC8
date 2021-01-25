@@ -6,6 +6,7 @@ Improvement :
 - constraint on entities
 - Authorisation
 
+- task isDone in ajax
 - delete user
 - pagination
 - order by
