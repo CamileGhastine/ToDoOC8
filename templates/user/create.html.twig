@@ -6,9 +6,11 @@
 {% block body %}
     <div class="row userForm">
         {{ form_start(form, {'action' : path('user_create')}) }}
-            {{ form_widget(form) }}
+        {{ form_widget(form) }}
 
-            <button type="submit" class="btn btn-success pull-right">Ajouter</button>
+        <button type="submit" class="btn btn-success pull-left">Ajouter</button>
+        {% set message = app.user ?  'Retour à la gestion des utilisateur' : 'Retour à la page de connexion' %}
+        <a href="{{ path('user_list') }}" class="btn btn-info pull-right">{{ message }}</a>
         {{ form_end(form) }}
     </div>
 {% endblock %}

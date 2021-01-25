@@ -8,7 +8,8 @@
         {{ form_start(form, {'action' : path('user_edit', {'id' : user.id})}) }}
         {{ form_widget(form) }}
 
-        <button type="submit" class="btn btn-success pull-right">Modifier</button>
+        <button type="submit" class="btn btn-success pull-left">Modifier</button>
+        <a href="{{ path('user_list') }}" class="btn btn-info pull-right">Retour à la gestion des utilisateur</a>
         {{ form_end(form) }}
     </div>
 {% endblock %}

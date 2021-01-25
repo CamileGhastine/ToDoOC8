@@ -3,11 +3,14 @@
 {% block body %}
     <div class="row">
         {{ form_start(form, {'action' : path('task_edit', { 'id' : task.id })}) }}
-            {{ form_widget(form) }}
+        {{ form_widget(form) }}
 
-            <button type="submit" class="btn btn-success pull-right">Modifier</button>
-        {{ form_end(form) }}
         {% set user = task.user == false ? 'Anonyme' : task.user.username  %}
         <p><em>Crée par {{ user }}</em></p>
+
+        <button type="submit" class="btn btn-success pull-left">Modifier</button>
+        <a href="{{ path('homepage') }}" class="btn btn-primary pull-right">Retour à la gestion tâches</a>
+
+        {{ form_end(form) }}
     </div>
 {% endblock %}

@@ -1,11 +1,17 @@
 Improvement :
-- Translation in french
 - No duplicate username when register
 - Typo
 - Service HandleForm
 - constraint on entities
 - Authorisation
 
+- lts
+- Translation in french (title, content)
+- limited date or edited date
+- display chapo in tasks list
+
+
+- responsive
 - task isDone in ajax
 - delete user
 - pagination
