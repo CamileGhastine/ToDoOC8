@@ -123,14 +123,14 @@ class UserTest extends KernelTestCase
     public function testLongPassword()
     {
         $password25 = 'A1';
-        for ($i=0; $i<23; $i++) {
+        for ($i=0; $i<98; $i++) {
             $password25.='a';
         }
         $user = ($this->getUser())
             ->setPassword($password25.'a');
         $this->assertHasErrors(1, $user);
 
-        // password reach limit of 25 characters
+        // password reach limit of 100 characters
         $user = ($this->getUser())
             ->setPassword($password25);
         $this->assertHasErrors(0, $user);

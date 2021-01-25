@@ -47,8 +47,8 @@ class UserController extends AbstractController
 
         if($userFormHandler->handle($request, $form, $user)) {
             return $this->redirectToRoute('login');
-
         }
+
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
     }
 
