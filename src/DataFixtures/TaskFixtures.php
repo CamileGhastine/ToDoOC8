@@ -13,7 +13,7 @@ class TaskFixtures extends Fixture implements dependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        for ($i=0; $i<10; $i++) {
+        for ($i=1; $i<=10; $i++) {
             $task = new Task();
 
             /** @var User $user */

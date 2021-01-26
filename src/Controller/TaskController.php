@@ -30,9 +30,10 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/done", name="task_done", methods={"GET"})
+     * @param TaskRepository $taskRepository
      * @return Response
      */
-    public function taskIsDoneAction(TaskRepository $taskRepository)
+    public function taskIsDoneAction(TaskRepository $taskRepository): Response
     {
         return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findTasksIsDone()]);
     }
@@ -92,10 +93,12 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/{id}/toggle", name="task_toggle")
+     * @param Request $request
      * @param Task $task
+     * @param CsrfTokenManagerInterface $tokenManager
      * @return RedirectResponse
      */
-    public function toggleTaskAction(Request $request, Task $task): RedirectResponse
+    public function toggleTaskAction(Request $request, Task $task, CsrfTokenManagerInterface $tokenManager): RedirectResponse
     {
         if (!$this->verifyRole()) {
             return $this->redirectToRoute('login');
@@ -116,15 +119,17 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/delete", name="task_delete")
      * @param Task $task
+     * @param Request $request
+     * @param CsrfTokenManagerInterface $tokenManager
      * @return RedirectResponse
      */
     public function deleteTaskAction(Task $task, Request $request, CsrfTokenManagerInterface $tokenManager): RedirectResponse
     {
-        if(!$this->getUser() || $this->getUser()->getId() !== $task->getUser()->getId()) {
+        if ($this->unauthorisedDelete($task, $request)) {
             return $this->redirectToRoute('task_list');
         }
 
-        if (!$request->request->get('_token') || $tokenManager->getToken('delete'.$task->getId())->getValue() !== $request->request->get('_token')) {
+        if ($tokenManager->getToken('delete'.$task->getId())->getValue() !== $request->request->get('_token')) {
             return $this->redirectToRoute('logout');
         }
 
@@ -137,10 +142,25 @@ class TaskController extends AbstractController
         return $this->redirectToRoute('task_list');
     }
 
-    private function VerifyRole()
+    private function VerifyRole(): bool
     {
-        $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
+        return $this->getUser() ? $this->getUser()->getRole() : false;
+    }
 
-        return $userRole;
+    private function unauthorisedDelete($task, $request)
+    {
+        if(!$request->request->get('_token')) {
+            return true;
+        }
+
+        if (!$task->getUser() && $this->getUser()->getRole()=== 'ROLE_ADMIN') {
+            return false ;
+        }
+
+        if($this->getUser() && $this->getUser()->getId() === $task->getUser()->getId()) {
+            return false;
+        }
+
+
     }
 }
