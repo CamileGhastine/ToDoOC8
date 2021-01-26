@@ -20,7 +20,7 @@ class SecurityControllerTest extends ControllerTest
     {
         $crawler = $this->client->request('GET', '/login');
         static::assertSelectorExists('form', 'No <Form>');
-        static::assertSame(2, $crawler->filter('input')->count(), 'Count <input> != 2');
+        static::assertSame(3, $crawler->filter('input')->count(), 'Count <input> != 2');
         static::assertSame(1, $crawler->filter('label:contains("Nom d\'utilisateur :")')->count(), 'No <label> for username');
         static::assertSame(1, $crawler->filter('label:contains("Mot de passe :")')->count(), 'No <label> for password');
         static::assertSelectorTextSame('button', 'Se connecter', 'No button <submit> Se connecter');

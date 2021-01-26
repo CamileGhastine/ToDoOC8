@@ -26,6 +26,6 @@ class DefaultControllerTest extends ControllerTest
         $this->createLogin();
         $crawler = $this->client->request('GET', '/');
 
-        static::assertSame(3, $crawler->filter('div.home>a.btn')->count());
+        static::assertSame(3, $crawler->filter('div.home>div>a.btn')->count());
     }
 }

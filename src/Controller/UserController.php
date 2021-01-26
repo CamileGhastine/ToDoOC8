@@ -23,9 +23,7 @@ class UserController extends AbstractController
      */
     public function listAction()
     {
-        $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
-
-        if ($userRole !== 'ROLE_ADMIN') {
+        if ($this->verifyRole() !== 'ROLE_ADMIN') {
             return $this->redirectToRoute('login');
         }
 
@@ -61,9 +59,7 @@ class UserController extends AbstractController
      */
     public function editAction(User $user, Request $request, UserFormHandler $userFormHandler)
     {
-        $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
-
-        if ($userRole !== 'ROLE_ADMIN') {
+        if ($this->verifyRole() !== 'ROLE_ADMIN') {
             return $this->redirectToRoute('login');
         }
 
@@ -75,5 +71,12 @@ class UserController extends AbstractController
         }
 
         return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
+    }
+
+    private function VerifyRole()
+    {
+        $userRole = $this->getUser() ? $this->getUser()->getRole() : false ;
+
+        return $userRole;
     }
 }

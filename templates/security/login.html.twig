@@ -4,14 +4,29 @@
     {% if error %}
         <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
+    <div class="container">
+        <div class="row">
+            <h4 class="col-12 py-5">Connectez-vous pour pouvoir utiliser toutes les fonctionnalités du site.</h4>
+        </div>
 
-    <form action="{{ path('login_check') }}" method="post">
-        <label for="username">Nom d'utilisateur :</label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}" />
+        <div class="row">
+            <div class="col-8">
+                <form action="{{ path('login_check') }}" method="post">
+                    <label for="username">Nom d'utilisateur :</label>
+                    <input type="text" id="username" name="_username" value="{{ last_username }}" />
 
-        <label for="password">Mot de passe :</label>
-        <input type="password" id="password" name="_password" />
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" id="password" name="_password" />
 
-        <button class="btn btn-success" type="submit">Se connecter</button>
-    </form>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <button class="btn btn-success" type="submit">Se connecter</button>
+                </form>
+            </div>
+            <div class="col-4">
+                <a href="{{ path('user_create') }}" class="btn btn-primary">S'enregistrer</a>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

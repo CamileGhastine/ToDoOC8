@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+{% block title %}Page introuvable{% endblock %}
+{% block stylesheets %}<link rel="stylesheet" href="{{ asset("css/error404.css") }}">{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-5">
+        <div class="media-trick px-5 py-5 text-center">
+            <h1>Page introuvable</h1>
+            <p>
+                Une erreur s'est produite, <a href="{{ path('homepage') }}">retouner sur la page d'accueil</a>.
+            </p>
+        </div>
+
+    </div>
+
+{% endblock %}
