@@ -56,7 +56,6 @@ class TaskController extends AbstractController
         $form = $this->createForm(TaskType::class, $task);
 
         if ($handleForm->handle($request, $form, $task)) {
-
             return $this->redirectToRoute('task_list');
         }
 
@@ -149,7 +148,7 @@ class TaskController extends AbstractController
 
     private function unauthorisedDelete($task, $request): bool
     {
-        if($request->request->get('_token')) {
+        if ($request->request->get('_token')) {
             return false;
         }
 
@@ -157,7 +156,7 @@ class TaskController extends AbstractController
             return false ;
         }
 
-        if($this->getUser() && $this->getUser()->getId() === $task->getUser()->getId()) {
+        if ($this->getUser() && $this->getUser()->getId() === $task->getUser()->getId()) {
             return false;
         }
 

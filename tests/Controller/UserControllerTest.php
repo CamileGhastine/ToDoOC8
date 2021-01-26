@@ -166,7 +166,7 @@ class UserControllerTest extends ControllerTest
     {
         $token = $this->client->getContainer()->get('session')
             ->get('_csrf/user');
-        $username = 'username'.rand(0,1000000);
+        $username = 'username'.rand(0, 1000000);
 
         $form = $crawler->selectButton('Ajouter')->form();
         $form['user[username]'] = $username;
@@ -177,7 +177,4 @@ class UserControllerTest extends ControllerTest
 
         return $form;
     }
-
-
-
 }

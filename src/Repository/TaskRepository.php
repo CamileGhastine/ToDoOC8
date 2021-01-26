@@ -19,9 +19,9 @@ class TaskRepository extends ServiceEntityRepository
         parent::__construct($registry, Task::class);
     }
 
-     /**
-      * @return Task[] Returns an array of Task objects
-      */
+    /**
+     * @return Task[] Returns an array of Task objects
+     */
     public function findTasksIsDone()
     {
         return $this->createQueryBuilder('t')
@@ -32,5 +32,4 @@ class TaskRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-
 }

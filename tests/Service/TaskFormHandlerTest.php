@@ -3,7 +3,6 @@
 
 namespace App\Tests\Service;
 
-
 use App\Entity\Task;
 use App\Service\TaskFormHandler;
 use Liip\TestFixturesBundle\Test\FixturesTrait;

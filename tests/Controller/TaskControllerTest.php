@@ -11,5 +11,4 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class TaskControllerTest extends ControllerTest
 {
-
 }

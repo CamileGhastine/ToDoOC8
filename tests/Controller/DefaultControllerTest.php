@@ -3,7 +3,6 @@
 
 namespace App\Tests\Controller;
 
-
 use Symfony\Component\HttpFoundation\Response;
 
 class DefaultControllerTest extends ControllerTest
@@ -22,7 +21,8 @@ class DefaultControllerTest extends ControllerTest
         static::assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
-    public function testHomePageView(){
+    public function testHomePageView()
+    {
         $this->createLogin();
         $crawler = $this->client->request('GET', '/');
 

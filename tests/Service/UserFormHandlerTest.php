@@ -3,7 +3,6 @@
 
 namespace App\Tests\Service;
 
-
 use App\Entity\User;
 use App\Service\UserFormHandler;
 use Liip\TestFixturesBundle\Test\FixturesTrait;

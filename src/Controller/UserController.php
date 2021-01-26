@@ -43,7 +43,7 @@ class UserController extends AbstractController
         /** @var Form $form */
         $form = $this->createForm(UserType::class, $user);
 
-        if($userFormHandler->handle($request, $form, $user)) {
+        if ($userFormHandler->handle($request, $form, $user)) {
             return $this->redirectToRoute('login');
         }
 
@@ -66,7 +66,7 @@ class UserController extends AbstractController
         /** @var Form $form */
         $form = $this->createForm(UserType::class, $user);
 
-        if($userFormHandler->handle($request, $form, $user)) {
+        if ($userFormHandler->handle($request, $form, $user)) {
             return $this->redirectToRoute('user_list');
         }
 
