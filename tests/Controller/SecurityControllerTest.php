@@ -33,7 +33,6 @@ class SecurityControllerTest extends ControllerTest
         $this->submitForm('Camile', 'Camile1');
 
         static::assertSelectorTextContains('h1', 'Bienvenue sur Todo List, l\'application vous permettant de gérer l\'ensemble de vos tâches sans effort !');
-//        static::assertResponseRedirects('/');
     }
 
     public function testLoginFormSubmitFailure()
@@ -42,7 +41,7 @@ class SecurityControllerTest extends ControllerTest
 
         static::assertSelectorTextContains('.alert.alert-danger', 'Identifiants invalides.', 'No class alert and alert-danger');
         static::assertInputValueSame('_username', 'Camile', 'No expected input value');
-//        static::assertResponseRedirects('/login');
+        static::assertSelectorTextContains('h4', 'Connectez-vous pour pouvoir utiliser toutes les fonctionnalités du site.', 'No come Back to login');
     }
 
     private function submitForm($username, $password)
@@ -55,7 +54,25 @@ class SecurityControllerTest extends ControllerTest
         $this->client->submit($form);
 
         $this->client->followRedirect();
+    }
 
-//        return $crawler;
+    public function testLogoutSessionClose()
+    {
+        $this->createlogin();
+        // user registered in session
+        static::assertSame(true, (bool)$this->client->getContainer()->get('session')->get('_security_main'));
+
+        $this->client->request('GET', '/logout');
+        // No user registered in session
+        static::assertSame(false, (bool)$this->client->getContainer()->get('session')->get('_security_main'));
+    }
+
+    public function testLogoutRedirectToLoginPage()
+    {
+        $this->client->followRedirects();
+        $this->createlogin();
+        $this->client->request('GET', '/logout');
+
+        static::assertSelectorTextContains('h4', 'Connectez-vous pour pouvoir utiliser toutes les fonctionnalités du site.');
     }
 }
