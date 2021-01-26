@@ -100,18 +100,18 @@ class TaskController extends AbstractController
      */
     public function toggleTaskAction(Request $request, Task $task, CsrfTokenManagerInterface $tokenManager): RedirectResponse
     {
-        if (!$this->verifyRole()) {
+        if (!$this->verifyRole() || $request->request->get('_token') === null) {
             return $this->redirectToRoute('login');
         }
 
-        if (!$request->request->get('_token') || $tokenManager->getToken('delete'.$task->getId())->getValue() !== $request->request->get('_token')) {
+        if (!$request->request->get('_token') || $tokenManager->getToken('toggle'.$task->getId())->getValue() !== $request->request->get('_token')) {
             return $this->redirectToRoute('logout');
         }
 
         $task->toggle(!$task->isDone());
         $this->getDoctrine()->getManager()->flush();
 
-        $this->addFlash('success', sprintf('La tâche %s a été marquée comme faite.', $task->getTitle()));
+        $this->addFlash('success', sprintf('Le statut de tâche "%s" a été actualisée.', $task->getTitle()));
 
         return $this->redirectToRoute('task_list');
     }
@@ -147,10 +147,10 @@ class TaskController extends AbstractController
         return $this->getUser() ? $this->getUser()->getRole() : false;
     }
 
-    private function unauthorisedDelete($task, $request)
+    private function unauthorisedDelete($task, $request): bool
     {
-        if(!$request->request->get('_token')) {
-            return true;
+        if($request->request->get('_token')) {
+            return false;
         }
 
         if (!$task->getUser() && $this->getUser()->getRole()=== 'ROLE_ADMIN') {
@@ -161,6 +161,6 @@ class TaskController extends AbstractController
             return false;
         }
 
-
+        return true ;
     }
 }

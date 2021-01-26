@@ -26,7 +26,7 @@
                         <form action="{{ path('task_toggle', {'id' : task.id }) }}" method="post">
                             <input type="hidden" name="_token" value="{{ csrf_token('toggle'~task.id) }}">
                             <button class="btn btn-success btn-sm pull-right">
-                                {% if not task.isDone %}Marquer comme faite{% else %}Marquer comme à faire{% endif %}
+                                {% if not task.isDone %}Marquer comme faite{% else %}Marquer comme non achevée{% endif %}
                             </button>
                         </form>
                         {% if task.user == app.user  %}
