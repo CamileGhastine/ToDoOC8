@@ -10,9 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-/**
- * @codeCoverageIgnore
- */
+
 class ControllerTest extends WebTestCase
 {
     use FixturesTrait;
@@ -39,9 +37,8 @@ class ControllerTest extends WebTestCase
         $cookie = new Cookie($session->getName(), $session->getId());
         $this->client->getCookieJar()->set($cookie);
     }
-    /**
-     * @codeCoverageIgnore
-     */
+
+
     public function testToAvoidWarningWhenTesting()
     {
         static::assertSame(1, 1);

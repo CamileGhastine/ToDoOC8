@@ -16,6 +16,17 @@ class SecurityControllerTest extends ControllerTest
         static::assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
+    public function testLoginWhenUserExists()
+    {
+        $this->createLogin();
+        $this->client->request('GET', 'login');
+        $this->client->followRedirect();
+        static::assertSelectorTextContains('h1', 'Bienvenue sur Todo List, l\'application vous permettant de gérer l\'ensemble de vos tâches sans effort !');
+
+//        echo $this->client->getResponse()->getContent();
+//        static::assertResponseRedirects('homepage');
+    }
+
     public function testLoginFormDisplay()
     {
         $crawler = $this->client->request('GET', '/login');
