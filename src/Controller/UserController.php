@@ -23,9 +23,7 @@ class UserController extends AbstractController
      */
     public function listAction()
     {
-        if ($this->verifyRole() !== 'ROLE_ADMIN') {
-            return $this->redirectToRoute('login');
-        }
+        $this->denyAccessUnlessGranted('ADMIN');
 
         return $this->render('user/list.html.twig', ['users' => $this->getDoctrine()->getRepository('App:User')->findAll()]);
     }
@@ -59,9 +57,7 @@ class UserController extends AbstractController
      */
     public function editAction(User $user, Request $request, UserFormHandler $userFormHandler)
     {
-        if ($this->verifyRole() !== 'ROLE_ADMIN') {
-            return $this->redirectToRoute('login');
-        }
+        $this->denyAccessUnlessGranted('ADMIN');
 
         /** @var Form $form */
         $form = $this->createForm(UserType::class, $user);

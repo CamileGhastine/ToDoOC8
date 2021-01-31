@@ -40,12 +40,12 @@
 
     <div class="collapse navbar-collapse justify-content-md-end" id="navbarColor03">
         <div class="">
-            {% if app.user %}
+            {% if is_granted('CONNECT') %}
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('homepage') }}">Gestion des tâches</a>
                     </li>
-                    {%  if app.user.role == 'ROLE_ADMIN' %}
+                    {%  if is_granted('ADMIN') %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('user_list') }}">Gestion des utilisateurs</a>
                         </li>

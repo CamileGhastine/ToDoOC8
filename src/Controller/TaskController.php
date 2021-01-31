@@ -21,9 +21,7 @@ class TaskController extends AbstractController
      */
     public function listAction(): Response
     {
-        if (!$this->verifyRole()) {
-            return $this->redirectToRoute('login');
-        }
+        $this->denyAccessUnlessGranted('CONNECT');
 
         return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findAll()]);
     }
@@ -35,6 +33,8 @@ class TaskController extends AbstractController
      */
     public function taskIsDoneAction(TaskRepository $taskRepository): Response
     {
+        $this->denyAccessUnlessGranted('CONNECT');
+
         return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findTasksIsDone()]);
     }
 
@@ -47,9 +47,7 @@ class TaskController extends AbstractController
      */
     public function createAction(Request $request, TaskFormHandler $handleForm)
     {
-        if (!$this->verifyRole()) {
-            return $this->redirectToRoute('login');
-        }
+        $this->denyAccessUnlessGranted('CONNECT');
 
         $task = new Task($this->getUser());
         /** @var Form $form */
@@ -73,9 +71,7 @@ class TaskController extends AbstractController
      */
     public function editAction(Request $request, Task $task, TaskFormHandler $handleForm)
     {
-        if (!$this->verifyRole()) {
-            return $this->redirectToRoute('login');
-        }
+        $this->denyAccessUnlessGranted('EDIT', $task);
 
         /** @var Form $form */
         $form = $this->createForm(TaskType::class, $task);
@@ -99,8 +95,10 @@ class TaskController extends AbstractController
      */
     public function toggleTaskAction(Request $request, Task $task, CsrfTokenManagerInterface $tokenManager): RedirectResponse
     {
-        if (!$this->verifyRole() || $request->request->get('_token') === null) {
-            return $this->redirectToRoute('login');
+        $this->denyAccessUnlessGranted('CONNECT');
+
+        if ($request->request->get('_token') === null) {
+            return $this->redirectToRoute('logout');
         }
 
         if (!$request->request->get('_token') || $tokenManager->getToken('toggle'.$task->getId())->getValue() !== $request->request->get('_token')) {
@@ -124,9 +122,7 @@ class TaskController extends AbstractController
      */
     public function deleteTaskAction(Task $task, Request $request, CsrfTokenManagerInterface $tokenManager): RedirectResponse
     {
-        if ($this->unauthorisedDelete($task, $request)) {
-            return $this->redirectToRoute('task_list');
-        }
+        $this->denyAccessUnlessGranted('DELETE', $task);
 
         if ($tokenManager->getToken('delete'.$task->getId())->getValue() !== $request->request->get('_token')) {
             return $this->redirectToRoute('logout');
@@ -139,27 +135,5 @@ class TaskController extends AbstractController
         $this->addFlash('success', 'La tâche a été supprimée avec succès.');
 
         return $this->redirectToRoute('task_list');
-    }
-
-    private function VerifyRole(): bool
-    {
-        return $this->getUser() ? $this->getUser()->getRole() : false;
-    }
-
-    private function unauthorisedDelete($task, $request): bool
-    {
-        if ($request->request->get('_token')) {
-            return false;
-        }
-
-        if (!$task->getUser() && $this->getUser()->getRole()=== 'ROLE_ADMIN') {
-            return false ;
-        }
-
-        if ($this->getUser() && $this->getUser()->getId() === $task->getUser()->getId()) {
-            return false;
-        }
-
-        return true ;
     }
 }
