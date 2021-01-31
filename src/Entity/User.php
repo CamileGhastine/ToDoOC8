@@ -67,6 +67,27 @@ class User implements UserInterface
      */
     private $role = 'ROLE_USER';
 
+    /**
+     * @ORM\Column(type="string", unique=true, nullable=true)
+     */
+    private $token;
+
+    /**
+     * @return mixed
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param mixed $token
+     */
+    public function setToken($token): void
+    {
+        $this->token = $token;
+    }
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();

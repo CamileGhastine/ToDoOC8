@@ -99,7 +99,7 @@ class TaskController extends AbstractController
         $this->denyAccessUnlessGranted('CONNECT');
 
         if (!$toggleTokenHandler->checkToken($request)) {
-            return $this->redirectToRoute('logout');
+            return $this->redirectToRoute('app_logout');
         }
 
         $task->toggle(!$task->isDone());
@@ -122,7 +122,7 @@ class TaskController extends AbstractController
         $this->denyAccessUnlessGranted('DELETE', $task);
 
         if ($tokenManager->getToken('delete'.$task->getId())->getValue() !== $request->request->get('_token')) {
-            return $this->redirectToRoute('logout');
+            return $this->redirectToRoute('app_logout');
         }
 
         $em = $this->getDoctrine()->getManager();

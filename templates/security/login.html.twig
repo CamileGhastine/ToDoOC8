@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Log in!{% endblock %}
+
 {% block body %}
     {% if error %}
         <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -11,12 +13,12 @@
 
         <div class="row">
             <div class="col-8">
-                <form action="{{ path('login_check') }}" method="post">
+                <form method="post">
                     <label for="username">Nom d'utilisateur :</label>
-                    <input type="text" id="username" name="_username" value="{{ last_username }}" />
+                    <input type="text" id="username" name="username" value="{{ last_username }}" />
 
                     <label for="password">Mot de passe :</label>
-                    <input type="password" id="password" name="_password" />
+                    <input type="password" id="password" name="password" />
 
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
@@ -28,5 +30,4 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
