@@ -6,6 +6,7 @@ use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
 use App\Service\TaskFormHandler;
+use App\Service\ToggleTokenHandler;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -93,15 +94,11 @@ class TaskController extends AbstractController
      * @param CsrfTokenManagerInterface $tokenManager
      * @return RedirectResponse
      */
-    public function toggleTaskAction(Request $request, Task $task, CsrfTokenManagerInterface $tokenManager): RedirectResponse
+    public function toggleTaskAction(Request $request, Task $task, ToggleTokenHandler $toggleTokenHandler): RedirectResponse
     {
         $this->denyAccessUnlessGranted('CONNECT');
 
-        if ($request->request->get('_token') === null) {
-            return $this->redirectToRoute('logout');
-        }
-
-        if (!$request->request->get('_token') || $tokenManager->getToken('toggle'.$task->getId())->getValue() !== $request->request->get('_token')) {
+        if (!$toggleTokenHandler->checkToken($request)) {
             return $this->redirectToRoute('logout');
         }
 
