@@ -2,13 +2,31 @@
 
 namespace App\Tests\Controller;
 
+use App\DataFixtures\TaskFixtures;
 use App\DataFixtures\UserFixtures;
-use App\Entity\User;
+use App\Entity\Task;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
-use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+
 
 class TaskControllerTest extends ControllerTest
 {
+    use FixturesTrait;
+
+    public function testTaskListInaccessibleToAnonymous()
+    {
+        $this->client->request('GET', '/tasks');
+        $this->assertResponseRedirects('/login');
+    }
+
+    public function testTaskListDisplay()
+    {
+        $this->createLogin();
+        $crawler = $this->client->request('GET', '/tasks');
+        $this->assertEquals(
+            count($this->getContainer()->get('doctrine')->getRepository('App:Task')->findAll()),
+            $crawler->filter('.task')->count()
+        );
+    }
+
+
 }

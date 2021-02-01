@@ -9,7 +9,7 @@
 
     <div class="row">
         {% for task in tasks %}
-            <div class="col-sm-4 col-lg-4 col-md-4">
+            <div class="col-sm-4 col-lg-4 col-md-4 task">
                 <div class="thumbnail">
                     <div class="caption">
                         {% set user = task.user == false ? 'Anonyme' : task.user.username  %}
