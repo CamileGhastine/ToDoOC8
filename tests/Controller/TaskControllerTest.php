@@ -18,6 +18,7 @@ class TaskControllerTest extends ControllerTest
     public function testTaskListInaccessibleToAnonymous()
     {
         $this->client->request('GET', '/tasks');
+
         $this->assertResponseRedirects('/login');
     }
 
@@ -25,6 +26,7 @@ class TaskControllerTest extends ControllerTest
     {
         $this->createLogin();
         $crawler = $this->client->request('GET', '/tasks');
+
         $this->assertEquals(
             count($this->getContainer()->get('doctrine')->getRepository('App:Task')->findAll()),
             $crawler->filter('.task')->count()
@@ -34,6 +36,7 @@ class TaskControllerTest extends ControllerTest
     public function testTaskIsDoneListInaccessibleToAnonymous()
     {
         $this->client->request('GET', '/tasks/done');
+
         $this->assertResponseRedirects('/login');
     }
 
@@ -41,6 +44,7 @@ class TaskControllerTest extends ControllerTest
     {
         $this->createLogin();
         $crawler = $this->client->request('GET', '/tasks/done');
+
         $this->assertEquals(
             count($this->getContainer()->get('doctrine')->getRepository('App:Task')->findTasksIsDone()),
             $crawler->filter('.task')->count()
@@ -50,6 +54,7 @@ class TaskControllerTest extends ControllerTest
     public function testTaskCreateInaccessibleToAnonymous()
     {
         $this->client->request('GET', '/tasks/create');
+
         $this->assertResponseRedirects('/login');
     }
 
@@ -57,6 +62,7 @@ class TaskControllerTest extends ControllerTest
     {
         $this->createLogin();
         $crawler = $this->client->request('GET', '/tasks/create');
+
         $this->assertSelectorExists(
             'div.taskCreateForm',
             'No div with class "taskCreateForm"'
@@ -69,7 +75,7 @@ class TaskControllerTest extends ControllerTest
         $this->assertSame(
             1,
             $crawler->filter('textarea')->count(),
-            'Should have 3 input (include hidden token)'
+            'Should have textarea)'
         );
         $this->assertSelectorExists(
             'button:contains("Ajouter")',
@@ -172,7 +178,6 @@ class TaskControllerTest extends ControllerTest
         $this->createLogin();
         $crawler = $this->client->request('GET', '/tasks/create');
 
-
         $form = $this->fillForm($crawler);
         $form['task[content]'] = '';
         $this->client->submit($form);
@@ -226,6 +231,106 @@ class TaskControllerTest extends ControllerTest
         );
     }
 
+    public function testTaskEditInaccessibleToAnonymous()
+    {
+        $this->client->request('GET', '/tasks/1/edit');
+
+        $this->assertResponseRedirects('/login');
+    }
+
+    public function testTaskEditFormDisplay()
+    {
+        $this->createLogin();
+        $this->client->request('GET', '/tasks/1/edit');
+
+        $taskRepostory = $this->getContainer()->get('doctrine')->getRepository('App:Task');
+        $task = $taskRepostory->findOneBy(['id' => 1]);
+
+        $this->assertSelectorExists(
+            'div.taskEditForm',
+            'No div with class "taskEditForm"'
+        );
+        $this->assertInputValueSame(
+            'task[title]',
+            $task->getTitle(),
+            'title display does not match'
+        );
+        $this->assertSelectorTextContains(
+            'textarea',
+            $task->getContent(),
+            'textarea does not match'
+        );
+        $this->assertSelectorExists(
+            'button:contains("Modifier")',
+            'No submit button "Ajouter"'
+        );
+    }
+
+    public function testTaskEditRedirectionWhenFormIsSubmitted()
+    {
+        $this->createLogin();
+        $crawler = $this->client->request('GET', '/tasks/1/edit');
+
+        $form = $crawler->selectButton('Modifier')->form();
+        $form['task[title]'] = 'An edit title task';
+        $this->client->submit($form);
+
+        $this->assertResponseRedirects('/tasks');
+    }
+
+    public function testTaskEditRegisterCorrectlyInDB()
+    {
+        $this->createLogin();
+        $crawler = $this->client->request('GET', '/tasks/1/edit');
+
+        $taskRepository = $this->getContainer()
+            ->get('doctrine')
+            ->getRepository('App:Task');
+        $countTasksBefore = count($taskRepository->findAll());
+        $taskBeforeEdition = $taskRepository->findOneBy(['id' => 1]);
+
+        $form = $crawler->selectButton('Modifier')->form();
+        $form['task[title]'] = 'An edit title task';
+        $this->client->submit($form);
+
+        $this->assertEquals(
+            count($taskRepository->findAll()),
+            $countTasksBefore,
+            "Task Created or deleted in DB"
+        );
+        $this->assertSame(
+            'An edit title task',
+            $taskRepository->findOneBy(['id' =>1])->getTitle(),
+            "Title edition problem"
+        );
+        $this->assertSame(
+            $taskBeforeEdition->getContent(),
+            $taskRepository->findOneBy(['id' => 1])->getContent(),
+            "Content edition problem"
+        );
+        $this->assertResponseRedirects(
+            '/tasks',
+            Response::HTTP_FOUND,
+            "No redirection to task_list"
+        );
+
+        $this->client->followRedirect();
+        $this->assertSelectorExists('.alert.alert-success', "No flash success message");
+    }
+
+    public function testTaskEditFormNotValid()
+    {
+        $this->createLogin();
+        $crawler = $this->client->request('GET', '/tasks/1/edit');
+
+        $form = $crawler->selectButton('Modifier')->form();
+        $form['task[title]'] = '';
+        $this->client->submit($form);
+
+        $this->assertSelectorExists('li:contains("Vous devez saisir un titre")');
+
+    }
+
     private function fillForm($crawler)
     {
         $token = $this->client->getContainer()->get('session')->get('_csrf/task');
@@ -236,4 +341,6 @@ class TaskControllerTest extends ControllerTest
 
         return $form;
     }
+
+
 }
