@@ -31,6 +31,8 @@ class ControllerTest extends WebTestCase
         $user = $users->getReferenceRepository()->getReferences()[$name];
 
         $this->client->loginUser($user);
+
+        return $user;
     }
 
     public function testToAvoidWarningWhenTesting()
