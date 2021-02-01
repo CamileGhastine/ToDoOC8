@@ -19,11 +19,12 @@ class TaskFixtures extends Fixture implements dependentFixtureInterface
             /** @var User $user */
             $user = $this->getUser();
 
-            $task -> setTitle('tâche n°'.$i);
-            $task -> setContent('la tâche n°'.$i.' est très importante');
-            $task -> setCreatedAt(new DateTime());
+            $task->setTitle('tâche n°'.$i);
+            $task->setContent('la tâche n°'.$i.' est très importante');
+            $task->setCreatedAt(new DateTime());
+            $task->toggle(rand(0,1));
             if ($user) {
-                $task -> setUser($user);
+                $task->setUser($user);
             }
 
             $manager->persist($task);
