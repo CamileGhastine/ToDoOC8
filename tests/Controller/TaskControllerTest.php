@@ -2,14 +2,9 @@
 
 namespace App\Tests\Controller;
 
-use App\DataFixtures\TaskFixtures;
-use App\DataFixtures\UserFixtures;
-use App\Entity\Task;
-use App\Repository\TaskRepository;
 use DateTime;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 
 class TaskControllerTest extends ControllerTest
@@ -469,7 +464,7 @@ class TaskControllerTest extends ControllerTest
         $taskAfter = $taskRepository->findOneBy(['id' => $id]);
 
         $this->assertSame(true, (bool)$taskAfter, "Task should not be delete");
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+        $this->assertResponseRedirects('/login');
     }
 
     public function testTaskDeleteNotAccessibleForTaskNotBelongToAdmin()
@@ -477,15 +472,16 @@ class TaskControllerTest extends ControllerTest
         $this->createLogin('Admin');
 
         $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
-        $id =  $this->getUndeletedIds()[0];
+        $id = $this->getUndeletedIds()[0];
 
         $this->client->request('POST', '/tasks/'.$id.'/delete', [
             "_token" => 'token'
         ]);
+
         $taskAfter = $taskRepository->findOneBy(['id' => $id]);
 
         $this->assertSame(true, (bool)$taskAfter, "Task should not be delete");
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+        $this->assertResponseRedirects('/login');
     }
 
     public function testTaskUserDeleteWithWrongToken()

@@ -11,7 +11,7 @@ class TaskVoter extends Voter
 {
     protected function supports($attribute, $task): bool
     {
-        return in_array($attribute, ['DELETE', 'EDIT'])
+        return in_array($attribute, ['TASK_DELETE', 'TASK_EDIT'])
             && $task instanceof Task;
     }
 
@@ -23,9 +23,9 @@ class TaskVoter extends Voter
         }
 
         switch ($attribute) {
-            case 'DELETE':
+            case 'TASK_DELETE':
                 return $this->canDelete($task, $user);
-            case 'EDIT':
+            case 'TASK_EDIT':
                 return true;
         }
 
