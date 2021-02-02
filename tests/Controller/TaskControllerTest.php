@@ -9,6 +9,7 @@ use App\Repository\TaskRepository;
 use DateTime;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 
 class TaskControllerTest extends ControllerTest
@@ -338,7 +339,7 @@ class TaskControllerTest extends ControllerTest
         $this->assertResponseRedirects('/login');
     }
 
-    public function testTaskToggleChangeIsDoneForm()
+    public function testTaskToggleChangeIsDonePOST()
     {
         $this->createLogin();
 
@@ -346,7 +347,7 @@ class TaskControllerTest extends ControllerTest
         $isDoneBefore = $taskRepository->findOneBy(['id' => '1'])->isDone();
 
         $this->client->request('POST', '/tasks/1/toggle', [
-            '_token'=>$this->getToken('form')
+            '_token'=>$this->getToken('POST', 'toggle')
         ]);
         $this->client->followRedirect();
 
@@ -356,14 +357,14 @@ class TaskControllerTest extends ControllerTest
         $this->assertSelectorExists('.alert.alert-success', "no success flash message");
     }
 
-    public function testTaskToggleChangeIsDoneLink()
+    public function testTaskToggleChangeIsDoneGET()
     {
         $this->createLogin();
 
         $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
         $isDoneBefore = $taskRepository->findOneBy(['id' => '1'])->isDone();
 
-        $this->client->request('GET', '/tasks/1/toggle?_token='.$this->getToken('link'));
+        $this->client->request('GET', '/tasks/1/toggle?_token='.$this->getToken('GET'));
         $this->client->followRedirect();
 
         $isDoneAfter = $taskRepository->findOneBy(['id' => '1'])->isDone();
@@ -372,7 +373,7 @@ class TaskControllerTest extends ControllerTest
         $this->assertSelectorExists('.alert.alert-success', "no success flash message");
     }
 
-    public function testTaskToggleChangeIsDoneWithTokenLink()
+    public function testTaskToggleChangeIsDoneWithWrongTokenGET()
     {
         $this->createLogin();
 
@@ -387,7 +388,7 @@ class TaskControllerTest extends ControllerTest
         $this->assertResponseRedirects('/logout');
     }
 
-    public function testTaskToggleChangeIsDoneWithTokenForm()
+    public function testTaskToggleChangeIsDoneWithWrongTokenPOST()
     {
         $this->createLogin();
 
@@ -404,30 +405,158 @@ class TaskControllerTest extends ControllerTest
         $this->assertResponseRedirects('/logout');
     }
 
+    public function testTaskDeleteInaccessibleToAnonymous()
+    {
+        $this->client->request('GET', '/tasks/1/delete');
+
+        $this->assertResponseRedirects('/login');
+    }
+
+    public function testTaskUserDeleteCorrectlyInDBForUser()
+    {
+        $this->createLogin();
+
+        $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
+        $id =  $this->getDeletedIds()[0];
+
+        $this->client->request('POST', '/tasks/'.$id.'/delete', [
+            "_token" => $this->getToken('POST', 'delete', $id)
+        ]);
+
+        $this->assertSame(null, $taskRepository->findOneBy(['id' => $id]), "Task not delete");
+        $this->assertResponseRedirects('/tasks');
+    }
+
+    public function testTaskAdminDeleteCorrectlyInDBForAdmin()
+    {
+        $this->createLogin('Admin');
+
+        $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
+
+        $this->client->request('POST', '/tasks/1/delete', [
+            "_token" => $this->getToken('POST', 'delete', 1)
+        ]);
+
+        $this->assertSame(null, $taskRepository->findOneBy(['id' => 1]), "Task not delete");
+        $this->assertResponseRedirects('/tasks');
+    }
+
+    public function testTaskAnonymousDeleteCorrectlyInDBForAdmin()
+    {
+        $this->createLogin('Admin');
+
+        $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
+
+        $this->client->request('POST', '/tasks/3/delete', [
+            "_token" => $this->getToken('POST', 'delete', 3)
+        ]);
+
+        $this->assertSame(null, $taskRepository->findOneBy(['id' => 3]), "Task not delete");
+        $this->assertResponseRedirects('/tasks');
+    }
+
+    public function testTaskDeleteNotAccessibleForTaskNotBelongToUser()
+    {
+        $this->createLogin();
+
+        $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
+        $id =  $this->getUndeletedIds()[0];
+
+        $this->client->request('POST', '/tasks/'.$id.'/delete', [
+            "_token" => 'token'
+        ]);
+
+        $taskAfter = $taskRepository->findOneBy(['id' => $id]);
+
+        $this->assertSame(true, (bool)$taskAfter, "Task should not be delete");
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+    }
+
+    public function testTaskDeleteNotAccessibleForTaskNotBelongToAdmin()
+    {
+        $this->createLogin('Admin');
+
+        $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
+        $id =  $this->getUndeletedIds()[0];
+
+        $this->client->request('POST', '/tasks/'.$id.'/delete', [
+            "_token" => 'token'
+        ]);
+        $taskAfter = $taskRepository->findOneBy(['id' => $id]);
+
+        $this->assertSame(true, (bool)$taskAfter, "Task should not be delete");
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+    }
+
+    public function testTaskUserDeleteWithWrongToken()
+    {
+        $this->createLogin();
+
+        $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
+        $id =  $this->getDeletedIds()[0];
+
+        $this->client->request('POST', '/tasks/'.$id.'/delete', [
+            "_token" => 'wrong_token'
+        ]);
+
+        $taskAfter = $taskRepository->findOneBy(['id' => $id]);
+
+        $this->assertSame(true, (bool)$taskAfter, "Task should not be delete");
+        $this->assertResponseRedirects('/logout');
+    }
 
 
+    private function getUndeletedIds(): array
+    {
+        $deletedId = $this->getDeletedIds();
+        $undeleteId = [];
+        for($i=1; $i<=10; $i++) {
 
-    private function getToken($method)
+            if (!in_array($i, $deletedId)) {
+                $undeleteId[] = $i;
+            }
+        }
+
+        return $undeleteId;
+    }
+
+    private function getDeletedIds(): array
+    {
+        $crawler = $this->client->request('GET', '/tasks');
+        $extract = $crawler->filterXPath('//form[contains(@action, "delete")]')
+            ->evaluate('substring-after(@action, "/tasks/")');
+
+        $deletedIds = [];
+        foreach ($extract as $i => $id) {
+            $deletedIds[]= substr($id, 0, 1);
+
+        }
+
+        return $deletedIds;
+    }
+
+    private function getToken($method, $action = null, $id = null)
     {
         $crawler = $this->client->request('GET', '/tasks');
 
-        if($method === 'form') {
-            $extract = $crawler->filter('form[action="/tasks/1/toggle"]>input[name="_token"]')->extract(['value']);
-            $token = $extract[0];
+        if($method === 'POST' && $action === 'delete') {
+            $extract = $crawler->filter('form[action="/tasks/'.$id.'/'.$action.'"]>input[name="_token"]')->extract(['value']);
 
-            return $token;
+            return $extract[0];
         }
 
-        if($method === 'link') {
+        if($method === 'POST' && $action === 'toggle') {
+            $extract = $crawler->filter('form[action="/tasks/1/'.$action.'"]>input[name="_token"]')->extract(['value']);
+
+            return $extract[0];
+        }
+
+        if($method === 'GET') {
             $extract = $crawler->filter('h4.isDoneLink>a')->extract(['href']);
             $url = $extract[0];
-            $token = strstr(str_replace('_token=', '', strstr($url, '_token=')), '>', true);
 
-            return $token;
+            return strstr(str_replace('_token=', '', strstr($url, '_token=')), '>', true);
         }
-
-
-
     }
 
     private function fillForm($crawler)
