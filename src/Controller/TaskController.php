@@ -91,7 +91,7 @@ class TaskController extends AbstractController
      * @Route("/tasks/{id}/toggle", name="task_toggle")
      * @param Request $request
      * @param Task $task
-     * @param CsrfTokenManagerInterface $tokenManager
+     * @param ToggleTokenHandler $toggleTokenHandler
      * @return RedirectResponse
      */
     public function toggleTaskAction(Request $request, Task $task, ToggleTokenHandler $toggleTokenHandler): RedirectResponse
