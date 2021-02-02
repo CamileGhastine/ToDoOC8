@@ -331,6 +331,105 @@ class TaskControllerTest extends ControllerTest
 
     }
 
+    public function testTaskToggleInaccessibleToAnonymous()
+    {
+        $this->client->request('GET', '/tasks/1/toggle');
+
+        $this->assertResponseRedirects('/login');
+    }
+
+    public function testTaskToggleChangeIsDoneForm()
+    {
+        $this->createLogin();
+
+        $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
+        $isDoneBefore = $taskRepository->findOneBy(['id' => '1'])->isDone();
+
+        $this->client->request('POST', '/tasks/1/toggle', [
+            '_token'=>$this->getToken('form')
+        ]);
+        $this->client->followRedirect();
+
+        $isDoneAfter = $taskRepository->findOneBy(['id' => '1'])->isDone();
+
+        $this->assertSame($isDoneBefore, !$isDoneAfter, "Problem to change isDone");
+        $this->assertSelectorExists('.alert.alert-success', "no success flash message");
+    }
+
+    public function testTaskToggleChangeIsDoneLink()
+    {
+        $this->createLogin();
+
+        $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
+        $isDoneBefore = $taskRepository->findOneBy(['id' => '1'])->isDone();
+
+        $this->client->request('GET', '/tasks/1/toggle?_token='.$this->getToken('link'));
+        $this->client->followRedirect();
+
+        $isDoneAfter = $taskRepository->findOneBy(['id' => '1'])->isDone();
+
+        $this->assertSame($isDoneBefore, !$isDoneAfter, "Problem to change isDone");
+        $this->assertSelectorExists('.alert.alert-success', "no success flash message");
+    }
+
+    public function testTaskToggleChangeIsDoneWithTokenLink()
+    {
+        $this->createLogin();
+
+        $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
+        $isDoneBefore = $taskRepository->findOneBy(['id' => '1'])->isDone();
+
+        $this->client->request('GET', '/tasks/1/toggle?_token=wrong_token');
+
+        $isDoneAfter = $taskRepository->findOneBy(['id' => '1'])->isDone();
+
+        $this->assertSame($isDoneBefore, $isDoneAfter, "change isDone with wrong token");
+        $this->assertResponseRedirects('/logout');
+    }
+
+    public function testTaskToggleChangeIsDoneWithTokenForm()
+    {
+        $this->createLogin();
+
+        $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
+        $isDoneBefore = $taskRepository->findOneBy(['id' => '1'])->isDone();
+
+        $this->client->request('POST', '/tasks/1/toggle',[
+            '_token' => 'wrong_token'
+        ]);
+
+        $isDoneAfter = $taskRepository->findOneBy(['id' => '1'])->isDone();
+
+        $this->assertSame($isDoneBefore, $isDoneAfter, "change isDone with wrong token");
+        $this->assertResponseRedirects('/logout');
+    }
+
+
+
+
+    private function getToken($method)
+    {
+        $crawler = $this->client->request('GET', '/tasks');
+
+        if($method === 'form') {
+            $extract = $crawler->filter('form[action="/tasks/1/toggle"]>input[name="_token"]')->extract(['value']);
+            $token = $extract[0];
+
+            return $token;
+        }
+
+        if($method === 'link') {
+            $extract = $crawler->filter('h4.isDoneLink>a')->extract(['href']);
+            $url = $extract[0];
+            $token = strstr(str_replace('_token=', '', strstr($url, '_token=')), '>', true);
+
+            return $token;
+        }
+
+
+
+    }
+
     private function fillForm($crawler)
     {
         $token = $this->client->getContainer()->get('session')->get('_csrf/task');
@@ -341,6 +440,4 @@ class TaskControllerTest extends ControllerTest
 
         return $form;
     }
-
-
 }
