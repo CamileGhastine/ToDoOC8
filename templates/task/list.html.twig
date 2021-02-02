@@ -14,7 +14,7 @@
                     <div class="caption">
                         {% set user = task.user == false ? 'Anonyme' : task.user.username  %}
                         <h4 class="pull-right isDoneLink">
-                            <a href="{{ path('task_toggle', {'id' : task.id }) }}?_token={{ csrf_token('toggle'~task.id) }}>
+                            <a href="{{ path('task_toggle', {'id' : task.id }) }}?_token={{ csrf_token('toggle'~task.id) }}">
                                 {% if task.isDone %} <span class="glyphicon glyphicon-check"></span>{% else %}<span class="glyphicon glyphicon-unchecked"></span>{% endif %}
                             </a>
                         </h4>

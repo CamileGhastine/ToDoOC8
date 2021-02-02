@@ -203,10 +203,10 @@ class TaskControllerTest extends ControllerTest
         $this->client->submit($form);
 
         $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
-        $expectedTimestamp = (int)(((new DateTime())->getTimestamp())/10);
+        $expectedTimestamp = (int)(((new DateTime())->getTimestamp())/100);
         $createdAtTimestamp = (int)(
             ($taskRepository->findOneBy(['title' => 'A new title task'])
-                ->getCreatedAt()->getTimestamp())/10);
+                ->getCreatedAt()->getTimestamp())/100);
 
         $this->assertSame($expectedTimestamp, $createdAtTimestamp);
     }
@@ -540,7 +540,6 @@ class TaskControllerTest extends ControllerTest
 
             return $extract[0];
         }
-
         if($method === 'POST' && $action === 'toggle') {
             $extract = $crawler->filter('form[action="/tasks/1/'.$action.'"]>input[name="_token"]')->extract(['value']);
 
@@ -551,7 +550,7 @@ class TaskControllerTest extends ControllerTest
             $extract = $crawler->filter('h4.isDoneLink>a')->extract(['href']);
             $url = $extract[0];
 
-            return strstr(str_replace('_token=', '', strstr($url, '_token=')), '>', true);
+            return str_replace('_token=', '', strstr($url, '_token='));
         }
     }
 
