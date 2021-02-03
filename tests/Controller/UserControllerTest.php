@@ -23,14 +23,14 @@ class UserControllerTest extends ControllerTest
     {
         $this->createLogin('Admin');
         $this->client->request('GET', '/users');
-        static::assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
 //    public function testListUserNotAccessibleToUser()
 //    {
 //        $this->createLogin();
 //        $this->client->request('GET', '/users');
-//        static::assertResponseRedirects('/login', Response::HTTP_FOUND);
+//        $this->assertResponseRedirects('/login', Response::HTTP_FOUND);
 //    }
 
     public function testListUserDisplayAllUsersWithEditButton()
@@ -38,15 +38,15 @@ class UserControllerTest extends ControllerTest
         $this->createLogin('Admin');
         $crawler = $this->client->request('GET', '/users');
 
-        static::assertSame(2, $crawler->filter('tr.user')->count(), 'All user not display ');
-        static::assertSame(2, $crawler->filter('tr.user>td>a.btn')->count(), 'Edit button missing');
+        $this->assertSame(2, $crawler->filter('tr.user')->count(), 'All user not display ');
+        $this->assertSame(2, $crawler->filter('tr.user>td>a.btn')->count(), 'Edit button missing');
     }
 
 
     public function testCreateUserAccessibleToAnonymous()
     {
         $this->client->request('GET', '/users/create');
-        static::assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     public function testDisplayUserFormWhenFormIsNotSubmitted()
