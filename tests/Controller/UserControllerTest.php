@@ -19,37 +19,57 @@ class UserControllerTest extends ControllerTest
 {
     use FixturesTrait;
 
+    // test the fixtures user has not been changed. Otherwise some tests won't be OK
+    public function testFixturesUserExactForTests()
+    {
+        $this->assertSame(1, 1);
+        $this->loadFixtures([UserFixtures::class]);
+        $UserRepository = $this->getContainer()->get('doctrine')->getRepository('App:User');
+
+        $admin = $UserRepository->findOneById(1);
+        $this->assertSame('Admin', $admin->getUsername(), "Not good username for fixture test");
+        $this->assertSame('ROLE_ADMIN', $admin->getRole(), "Not good role for user fixtures test");
+
+        $user = $UserRepository->findOneById(2);
+        $this->assertSame('Camile', $user->getUsername(), "Not good username for fixture test");
+        $this->assertSame('ROLE_USER', $user->getRole(), "Not good role for user fixtures test");
+    }
+
     public function testListUserAccessibleToAdmin()
     {
         $this->createLogin('Admin');
         $this->client->request('GET', '/users');
+
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
-//    public function testListUserNotAccessibleToUser()
-//    {
-//        $this->createLogin();
-//        $this->client->request('GET', '/users');
-//        $this->assertResponseRedirects('/login', Response::HTTP_FOUND);
-//    }
+    public function testListUserNotAccessibleToUser()
+    {
+        $this->client->followRedirects();
+        $this->createLogin();
+        $this->client->request('GET', '/users');
 
-    public function testListUserDisplayAllUsersWithEditButton()
+        $this->assertRouteSame('homepage');
+    }
+
+    public function testListUserDisplay()
     {
         $this->createLogin('Admin');
         $crawler = $this->client->request('GET', '/users');
 
-        $this->assertSame(2, $crawler->filter('tr.user')->count(), 'All user not display ');
+        $this->assertSelectorTextContains('tr>td', 'Admin', "User Admin not listed");
+        $this->assertSelectorExists('tr>td:contains("Camile")', "User Camile not listed");
         $this->assertSame(2, $crawler->filter('tr.user>td>a.btn')->count(), 'Edit button missing');
     }
 
 
-    public function testCreateUserAccessibleToAnonymous()
+    public function testCreateUserRoute()
     {
         $this->client->request('GET', '/users/create');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
-    public function testDisplayUserFormWhenFormIsNotSubmitted()
+    public function testCreateUserDisplayForm()
     {
         $crawler = $this->client->request('GET', '/users/create');
 
@@ -58,18 +78,35 @@ class UserControllerTest extends ControllerTest
         $this->assertSelectorExists('button:contains("Ajouter")', 'No submit button "Ajouter"');
     }
 
-//    public function testRedirectToLoginWhenFormIsSubmittedAndValid()
-//    {
-//        $crawler = $this->client->request('GET', '/users/create');
-//
-//        $form = $this->submitForm($crawler);
-//        $this->client->submit($form);
-//
-//        $this->assertResponseRedirects('login');
-//        $crawler = $this->client->followRedirect();
-//        $this->assertSame(1, $crawler->filter('div.alert.alert-success')->count());
-//    }
+    public function testCreateUserRedirectFormValid()
+    {
+        $this->loadFixtures([UserFixtures::class]);
+        $crawler = $this->client->request('GET', '/users/create');
 
+        $form = $this->submitForm($crawler);
+        $this->client->submit($form);
+        $this->client->followRedirect();
+
+        $this->assertRouteSame('app_login',[], "Not app_login route after redirection");
+        $this->assertSelectorExists('div.alert.alert-success', "No div alert-success");
+    }
+
+    public function testUserSaveInDB()
+    {
+        $this->loadFixtures([UserFixtures::class]);
+        $userRepository = $this->client->getContainer()->get('doctrine')->getRepository(User::class);
+        $numberUsersBeforeSubmit = count($userRepository->findAll());
+
+        $crawler = $this->client->request('GET', '/users/create');
+        $form = $this->submitForm($crawler);
+        $this->client->submit($form);
+
+        $NumberUsersAfterSubmit = count($userRepository->findAll());
+        $newUser = $userRepository->findOneById(3);
+
+        $this->assertSame($numberUsersBeforeSubmit + 1, $NumberUsersAfterSubmit, "No New User in DB");
+        $this->assertSame('user', $newUser->getUsername(), "Good user register in DB");
+    }
 
     public function testFormConstraintsWhenFormIsSubmittedWithNoValidUsername()
     {
@@ -104,7 +141,7 @@ class UserControllerTest extends ControllerTest
         $this->assertSelectorExists('div.form-group.has-error');
     }
 
-    public function testFormConstraintsWhenFormIsSubmittedWithDifferentdPassword()
+    public function testFormConstraintsWhenFormIsSubmittedWithDifferentPassword()
     {
         $crawler = $this->client->request('GET', '/users/create');
 
@@ -149,24 +186,12 @@ class UserControllerTest extends ControllerTest
         $this->assertSelectorExists('div.form-group.has-error');
     }
 
-    public function testUserSaveInDB()
-    {
-        $usersBeforeSubmit= $this->client->getContainer()->get('doctrine')->getRepository(User::class)->findAll();
-
-        $crawler = $this->client->request('GET', '/users/create');
-        $form = $this->submitForm($crawler);
-        $this->client->submit($form);
-
-        $usersAfterSubmit = $this->client->getContainer()->get('doctrine')->getRepository(User::class)->findAll();
-        $this->assertSame(count($usersBeforeSubmit) + 1, count($usersAfterSubmit));
-    }
-
 
     private function submitForm($crawler)
     {
         $token = $this->client->getContainer()->get('session')
             ->get('_csrf/user');
-        $username = 'username'.rand(0, 1000000);
+        $username = 'user';
 
         $form = $crawler->selectButton('Ajouter')->form();
         $form['user[username]'] = $username;

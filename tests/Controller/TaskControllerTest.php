@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller;
 
+use App\DataFixtures\TaskFixtures;
 use DateTime;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,6 +11,21 @@ use Symfony\Component\HttpFoundation\Response;
 class TaskControllerTest extends ControllerTest
 {
     use FixturesTrait;
+
+    // test the fixtures task has not been changed. Otherwise some tests won't be OK
+    public function testFixturesTaskExactForTests()
+    {
+        $this->assertSame(1, 1);
+        $this->loadFixtures([TaskFixtures::class]);
+        $UserRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
+
+        for($i=1; $i<=3; $i++) {
+            $expected = $i<3 ? $i : null;
+            $task = $UserRepository->findOneById($i);
+
+            $this->assertSame($expected, $i<3 ? $task->getUser()->getId() : $task->getUser(), "Not good user for task fixtures test");
+        }
+    }
 
     public function testTaskListInaccessibleToAnonymous()
     {
