@@ -41,7 +41,9 @@ class SecurityControllerTest extends ControllerTest
 //        $this->loadFixtureFiles([__DIR__ . '/userFixture.yaml']);
         $this->submitForm('Camile', 'Camile1');
 
-        $this->assertSelectorTextContains('h1', 'Bienvenue sur Todo List, l\'application vous permettant de gérer l\'ensemble de vos tâches sans effort !');
+        // user registered in session
+        $this->assertSame(true, (bool)$this->client->getContainer()->get('session')->get('_security_main'));
+        $this->assertRouteSame('homepage');
     }
 
     public function testLoginFormSubmitFailure()
@@ -50,7 +52,7 @@ class SecurityControllerTest extends ControllerTest
 
         $this->assertSelectorTextContains('.alert.alert-danger', 'Identifiants invalides.', 'No class alert and alert-danger');
         $this->assertInputValueSame('username', 'Camile', 'No expected input value');
-        $this->assertSelectorTextContains('h4', 'Connectez-vous pour pouvoir utiliser toutes les fonctionnalités du site.', 'No come Back to login');
+        $this->assertRouteSame('app_login');
     }
 
     private function submitForm($username, $password)
@@ -68,10 +70,8 @@ class SecurityControllerTest extends ControllerTest
     public function testLogoutSessionClose()
     {
         $this->createlogin();
-        // user registered in session
-        $this->assertSame(true, (bool)$this->client->getContainer()->get('session')->get('_security_main'));
+         $this->client->request('GET', '/logout');
 
-        $this->client->request('GET', '/logout');
         // No user registered in session
         $this->assertSame(false, (bool)$this->client->getContainer()->get('session')->get('_security_main'));
     }
@@ -82,6 +82,6 @@ class SecurityControllerTest extends ControllerTest
         $this->createlogin();
         $this->client->request('GET', '/logout');
 
-        $this->assertSelectorTextContains('h4', 'Connectez-vous pour pouvoir utiliser toutes les fonctionnalités du site.');
+        $this->assertRouteSame('app_login');
     }
 }
