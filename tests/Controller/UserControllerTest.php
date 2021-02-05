@@ -22,7 +22,6 @@ class UserControllerTest extends ControllerTest
     // test the fixtures user has not been changed. Otherwise some tests won't be OK
     public function testFixturesUserExactForTests()
     {
-        $this->assertSame(1, 1);
         $this->loadFixtures([UserFixtures::class]);
         $UserRepository = $this->getContainer()->get('doctrine')->getRepository('App:User');
 
@@ -62,7 +61,6 @@ class UserControllerTest extends ControllerTest
         $this->assertSame(2, $crawler->filter('tr.user>td>a.btn')->count(), 'Edit button missing');
     }
 
-
     public function testCreateUserRoute()
     {
         $this->client->request('GET', '/users/create');
@@ -83,7 +81,7 @@ class UserControllerTest extends ControllerTest
         $this->loadFixtures([UserFixtures::class]);
         $crawler = $this->client->request('GET', '/users/create');
 
-        $form = $this->submitForm($crawler);
+        $form = $this->fillCreateForm($crawler);
         $this->client->submit($form);
         $this->client->followRedirect();
 
@@ -91,14 +89,14 @@ class UserControllerTest extends ControllerTest
         $this->assertSelectorExists('div.alert.alert-success', "No div alert-success");
     }
 
-    public function testUserSaveInDB()
+    public function testCreateUserUserSaveInDB()
     {
         $this->loadFixtures([UserFixtures::class]);
         $userRepository = $this->client->getContainer()->get('doctrine')->getRepository(User::class);
         $numberUsersBeforeSubmit = count($userRepository->findAll());
 
         $crawler = $this->client->request('GET', '/users/create');
-        $form = $this->submitForm($crawler);
+        $form = $this->fillCreateForm($crawler);
         $this->client->submit($form);
 
         $NumberUsersAfterSubmit = count($userRepository->findAll());
@@ -108,44 +106,44 @@ class UserControllerTest extends ControllerTest
         $this->assertSame('user', $newUser->getUsername(), "Good user register in DB");
     }
 
-    public function testFormConstraintsWhenFormIsSubmittedWithNoValidUsername()
+    public function testCreateUserFormConstraintsWhenFormIsSubmittedWithNoValidUsername()
     {
         $crawler = $this->client->request('GET', '/users/create');
 
-        $form = $this->submitForm($crawler);
+        $form = $this->fillCreateForm($crawler);
         $form['user[username]'] = 'h';
         $this->client->submit($form);
 
         $this->assertSelectorExists('div.form-group.has-error');
     }
 
-    public function testFormConstraintsWhenFormIsSubmittedWithNoValidEmail()
+    public function testCreateUserFormConstraintsWhenFormIsSubmittedWithNoValidEmail()
     {
         $crawler = $this->client->request('GET', '/users/create');
 
-        $form = $this->submitForm($crawler);
+        $form = $this->fillCreateForm($crawler);
         $form['user[email]'] = 'unvalid email';
         $this->client->submit($form);
 
         $this->assertSelectorExists('div.form-group.has-error');
     }
 
-    public function testFormConstraintsWhenFormIsSubmittedWithNoValidPassword()
+    public function testCreateUserFormConstraintsWhenFormIsSubmittedWithNoValidPassword()
     {
         $crawler = $this->client->request('GET', '/users/create');
 
-        $form = $this->submitForm($crawler);
+        $form = $this->fillCreateForm($crawler);
         $form['user[password][first]'] = 'paswword';
         $this->client->submit($form);
 
         $this->assertSelectorExists('div.form-group.has-error');
     }
 
-    public function testFormConstraintsWhenFormIsSubmittedWithDifferentPassword()
+    public function testCreateUserFormConstraintsWhenFormIsSubmittedWithDifferentPassword()
     {
         $crawler = $this->client->request('GET', '/users/create');
 
-        $form = $this->submitForm($crawler);
+        $form = $this->fillCreateForm($crawler);
         $form['user[password][first]'] = 'Password2021';
         $form['user[password][first]'] = 'Password2022';
         $this->client->submit($form);
@@ -153,33 +151,166 @@ class UserControllerTest extends ControllerTest
         $this->assertSelectorExists('div.form-group.has-error');
     }
 
-    public function testFormConstraintsWhenFormIsSubmittedWithWrongToken()
+    public function testCreateUserFormConstraintsWhenFormIsSubmittedWithWrongToken()
     {
         $crawler = $this->client->request('GET', '/users/create');
 
-        $form = $this->submitForm($crawler);
+        $form = $this->fillCreateForm($crawler);
         $form['user[_token]'] = 'wrongToken';
         $this->client->submit($form);
 
         $this->assertSelectorExists('div.alert.alert-danger');
     }
 
-    public function testFormConstraintsWhenFormIsSubmittedWithNotUniqueUsername()
+    public function testCreateUserFormConstraintsWhenFormIsSubmittedWithNotUniqueUsername()
     {
         $crawler = $this->client->request('GET', '/users/create');
 
-        $form = $this->submitForm($crawler);
+        $form = $this->fillCreateForm($crawler);
         $form['user[username]'] = 'Camile';
         $this->client->submit($form);
 
         $this->assertSelectorExists('div.form-group.has-error');
     }
 
-    public function testFormConstraintsWhenFormIsSubmittedWithNotUniqueEmail()
+    public function testCreateUserFormConstraintsWhenFormIsSubmittedWithNotUniqueEmail()
     {
         $crawler = $this->client->request('GET', '/users/create');
 
-        $form = $this->submitForm($crawler);
+        $form = $this->fillCreateForm($crawler);
+        $form['user[email]'] = 'Camile@todoco.fr';
+        $this->client->submit($form);
+
+        $this->assertSelectorExists('div.form-group.has-error');
+    }
+
+    public function testEditUserRoute()
+    {
+        $this->createLogin('Admin');
+        $this->client->request('GET', '/users/1/edit');
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    public function testEditUserNotAccessibleToUser()
+    {
+        $this->createLogin();
+        $this->client->request('GET', '/users/1/edit');
+        $this->client->followRedirect();
+
+        $this->assertRouteSame('homepage');
+    }
+
+    public function testEditUserDisplayForm()
+    {
+        $this->createLogin('Admin');
+        $crawler = $this->client->request('GET', '/users/1/edit');
+
+        $this->assertSelectorExists('div.userForm', 'No div with class "userForm"');
+        $this->assertSame(5, $crawler->filter('input')->count(), 'Should have 5 input include token');
+        $this->assertSelectorExists('button:contains("Modifier")', 'No submit button "Modifier"');
+        $this->assertInputValueSame('user[username]', 'Admin');
+        $this->assertInputValueSame('user[email]', 'Admin@todoco.fr');
+        $this->assertInputValueSame('user[role]', 'ROLE_USER');
+    }
+
+    public function testEditUserRedirectFormValid()
+    {
+        $this->createLogin('Admin');
+        $crawler = $this->client->request('GET', '/users/1/edit');
+
+        $form = $crawler->selectButton('Modifier')->form();
+        $form['user[username]'] = 'usernameEdited';
+        $this->client->submit($form);
+        $this->client->followRedirect();
+
+        $this->assertRouteSame('user_list',[], "Not app_login route after redirection");
+        $this->assertSelectorExists('div.alert.alert-success', "No div alert-success");
+    }
+
+    public function testEditUserUserSaveInDB()
+    {
+        $this->createLogin('Admin');
+
+        $userRepository = $this->client->getContainer()->get('doctrine')->getRepository(User::class);
+        $numberUsersBeforeSubmit = count($userRepository->findAll());
+
+        $crawler = $this->client->request('GET', '/users/2/edit');
+        $form = $crawler->selectButton('Modifier')->form();
+        $form['user[username]'] = 'usernameEdited';
+        $form['user[email]'] ='emailedited@todoco.fr';
+        $form['user[role]'] ='ROLE_ADMIN';
+        $this->client->submit($form);
+
+        $NumberUsersAfterSubmit = count($userRepository->findAll());
+        $newUser = $userRepository->findOneById(2);
+
+        $this->assertSame($numberUsersBeforeSubmit, $NumberUsersAfterSubmit, "number of User in DB have change");
+        $this->assertSame('usernameEdited', $newUser->getUsername(), "Good username edited in DB");
+        $this->assertSame('emailedited@todoco.fr', $newUser->getEmail(), "Good email edited in DB");
+        $this->assertSame('ROLE_ADMIN', $newUser->getRole(), "Good role edited in DB");
+    }
+
+
+//
+
+// problem not blank
+
+//
+    public function testEditUserFormConstraintsWhenFormIsSubmittedWithNoValidUsername()
+    {
+        $this->createLogin('Admin');
+        $crawler = $this->client->request('GET', '/users/1/edit');
+
+        $form = $crawler->selectButton('Modifier')->form();
+        $form['user[username]'] = 'u';
+        $this->client->submit($form);
+
+        $this->assertSelectorExists('div.form-group.has-error');
+    }
+
+    public function testEditUserFormConstraintsWhenFormIsSubmittedWithNoValidEmail()
+    {
+        $this->createLogin('Admin');
+        $crawler = $this->client->request('GET', '/users/1/edit');
+
+        $form = $crawler->selectButton('Modifier')->form();
+        $form['user[email]'] = 'unvalid email';
+        $this->client->submit($form);
+
+        $this->assertSelectorExists('div.form-group.has-error');
+    }
+
+    public function testEditUserFormConstraintsWhenFormIsSubmittedWithWrongToken()
+    {
+        $this->createLogin('Admin');
+        $crawler = $this->client->request('GET', '/users/1/edit');
+
+        $form = $crawler->selectButton('Modifier')->form();
+        $form['user[_token]'] = 'wrongToken';
+        $this->client->submit($form);
+
+        $this->assertSelectorExists('div.alert.alert-danger');
+    }
+
+    public function testEditUserFormConstraintsWhenFormIsSubmittedWithNotUniqueUsername()
+    {
+        $this->createLogin('Admin');
+        $crawler = $this->client->request('GET', '/users/1/edit');
+
+        $form = $crawler->selectButton('Modifier')->form();
+        $form['user[username]'] = 'Camile';
+        $this->client->submit($form);
+
+        $this->assertSelectorExists('div.form-group.has-error');
+    }
+
+    public function testEditUserFormConstraintsWhenFormIsSubmittedWithNotUniqueEmail()
+    {
+        $this->createLogin('Admin');
+        $crawler = $this->client->request('GET', '/users/1/edit');
+
+        $form = $crawler->selectButton('Modifier')->form();
         $form['user[email]'] = 'Camile@todoco.fr';
         $this->client->submit($form);
 
@@ -187,7 +318,13 @@ class UserControllerTest extends ControllerTest
     }
 
 
-    private function submitForm($crawler)
+
+// test form roles
+
+
+
+
+    private function fillCreateForm($crawler)
     {
         $token = $this->client->getContainer()->get('session')
             ->get('_csrf/user');

@@ -4,7 +4,7 @@
 {% block header_img %}{% endblock %}
 
 {% block body %}
-    <div class="row">
+    <div class="row userForm">
         {{ form_start(form, {'action' : path('user_edit', {'id' : user.id})}) }}
         {{ form_widget(form) }}
 
