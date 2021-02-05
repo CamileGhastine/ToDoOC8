@@ -72,22 +72,6 @@ class User implements UserInterface
      */
     private $token;
 
-    /**
-     * @return mixed
-     */
-    public function getToken()
-    {
-        return $this->token;
-    }
-
-    /**
-     * @param mixed $token
-     */
-    public function setToken($token): void
-    {
-        $this->token = $token;
-    }
-
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -172,6 +156,22 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param mixed $token
+     */
+    public function setToken($token): void
+    {
+        $this->token = $token;
     }
 
     public function getRoles(): array

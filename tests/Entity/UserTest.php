@@ -4,6 +4,7 @@
 namespace App\Tests\Entity;
 
 use App\DataFixtures\UserFixtures;
+use App\Entity\Task;
 use App\Entity\User;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -13,7 +14,7 @@ class UserTest extends KernelTestCase
 {
     use FixturesTrait;
 
-    private function getUser()
+    private function getUser(): User
     {
         return (new User())
             ->setUsername('username')
@@ -187,5 +188,30 @@ class UserTest extends KernelTestCase
 
         $this->loadFixtures([UserFixtures::class]);
         $this->assertHasErrors(1, $user);
+    }
+
+    public function testSetGetRemoveTasks()
+    {
+        $user = $this->getUser();
+        $task = (new Task())
+            -> setTitle('new title')
+            -> setContent('new content')
+        ;
+
+        $user->addTask($task);
+        $this->assertSame($task, $user->getTasks()[0]);
+
+        $user->removeTask($task);
+        $this->assertSame(null, $user->getTasks()[0]);
+
+    }
+
+    public function testSetGetToken()
+    {
+        $user = $this->getUser();
+        $token = 'a new token';
+        $user->setToken($token);
+
+        $this->assertSame($token, $user->getToken());
     }
 }

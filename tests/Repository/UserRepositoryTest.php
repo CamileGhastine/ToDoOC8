@@ -3,26 +3,26 @@
 
 namespace App\Tests\Repository;
 
-use App\DataFixtures\TaskFixtures;
+
+use App\DataFixtures\UserFixtures;
+use App\Repository\UserRepository;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use App\Repository\TaskRepository;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class TaskRepositoryTest extends KernelTestCase
+class UserRepositoryTest extends KernelTestCase
 {
     use FixturesTrait;
 
     public function getRepository()
     {
         self::bootKernel();
-        $this->loadFixtures([TaskFixtures::class]);
-        return self::$container->get(TaskRepository::class);
+        $this->loadFixtures([UserFixtures::class]);
+        return self::$container->get(UserRepository::class);
     }
 
     public function testCount()
     {
         $users= $this->getRepository()->count([]);
-        $this->assertEquals(10, $users);
+        $this->assertEquals(2, $users);
     }
 }
