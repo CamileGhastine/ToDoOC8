@@ -26,7 +26,6 @@
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">src</directory>
             <exclude>
-                <directory>src/Repository</directory>
                 <file>src/Kernel.php</file>
             </exclude>
         </whitelist>

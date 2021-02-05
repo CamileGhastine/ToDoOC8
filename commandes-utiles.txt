@@ -1,0 +1,17 @@
+Obtenir le code coverage de PHPunit
+Dans la console :
+php bin/phpunit --coverage-html public/test-coverage
+Dans le navigateur :
+https://127.0.0.1:8000/test-coverage
+
+
+Afficher la page résultat d'un test
+Dans le test :
+echo $this->client->getResponse()->getContent()
+Dans la console :
+php bin/phpunit --filter=monTest>public/test.html
+Dans le navigateur :
+https://127.0.0.1:8000/test.html
+
+codeSniffer :
+-- vendor/bin/phpcbf --standard=PSR12 src

@@ -251,12 +251,6 @@ class UserControllerTest extends ControllerTest
         $this->assertSame('ROLE_ADMIN', $newUser->getRole(), "Good role edited in DB");
     }
 
-
-//
-
-// problem not blank
-
-//
     public function testEditUserFormConstraintsWhenFormIsSubmittedWithNoValidUsername()
     {
         $this->createLogin('Admin');
@@ -316,13 +310,6 @@ class UserControllerTest extends ControllerTest
 
         $this->assertSelectorExists('div.form-group.has-error');
     }
-
-
-
-// test form roles
-
-
-
 
     private function fillCreateForm($crawler)
     {
