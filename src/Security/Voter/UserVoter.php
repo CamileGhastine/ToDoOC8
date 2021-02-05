@@ -10,7 +10,7 @@ class UserVoter extends Voter
 {
     protected function supports($attribute, $subject): bool
     {
-        return in_array($attribute, ['CONNECT', 'ADMIN']);
+        return in_array($attribute, ['USER_CONNECT', 'USER_ADMIN']);
     }
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
@@ -21,9 +21,9 @@ class UserVoter extends Voter
         }
 
         switch ($attribute) {
-            case 'CONNECT':
+            case 'USER_CONNECT':
                 return true;
-            case 'ADMIN':
+            case 'USER_ADMIN':
                 return $user->getRole() === 'ROLE_ADMIN';
         }
 

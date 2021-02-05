@@ -14,7 +14,7 @@
                     <div class="caption">
                         {% set user = task.user == false ? 'Anonyme' : task.user.username  %}
                         <h4 class="pull-right isDoneLink">
-                            <a href="{{ path('task_toggle', {'id' : task.id }) }}?_token={{ csrf_token('toggle'~task.id) }}>
+                            <a href="{{ path('task_toggle', {'id' : task.id }) }}?_token={{ csrf_token('toggle'~task.id) }}">
                                 {% if task.isDone %} <span class="glyphicon glyphicon-check"></span>{% else %}<span class="glyphicon glyphicon-unchecked"></span>{% endif %}
                             </a>
                         </h4>
@@ -29,7 +29,7 @@
                                 {% if not task.isDone %}Marquer comme faite{% else %}Marquer comme non achevée{% endif %}
                             </button>
                         </form>
-                        {% if is_granted('DELETE', task) %}
+                        {% if is_granted('TASK_DELETE', task) %}
                             <form action="{{ path('task_delete', {'id' : task.id }) }}" method="post">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete'~task.id) }}">
                                 <button class="btn btn-danger btn-sm pull-right">Supprimer</button>

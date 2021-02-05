@@ -3,18 +3,29 @@
 namespace App\Tests\Controller;
 
 use App\DataFixtures\TaskFixtures;
-use App\DataFixtures\UserFixtures;
-use App\Entity\Task;
-use App\Repository\TaskRepository;
 use DateTime;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 
 class TaskControllerTest extends ControllerTest
 {
     use FixturesTrait;
+
+    // test the fixtures task has not been changed. Otherwise some tests won't be OK
+    public function testFixturesTaskExactForTests()
+    {
+        $this->assertSame(1, 1);
+        $this->loadFixtures([TaskFixtures::class]);
+        $UserRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
+
+        for($i=1; $i<=3; $i++) {
+            $expected = $i<3 ? $i : null;
+            $task = $UserRepository->findOneById($i);
+
+            $this->assertSame($expected, $i<3 ? $task->getUser()->getId() : $task->getUser(), "Not good user for task fixtures test");
+        }
+    }
 
     public function testTaskListInaccessibleToAnonymous()
     {
@@ -200,6 +211,7 @@ class TaskControllerTest extends ControllerTest
             $taskRepository->findOneBy(['title' => 'A new title task'])->isDone());
     }
 
+    //This test is not conform. It can fail 1 ouf of 100
     public function testTaskCreateCreatedAtSetCorrectly()
     {
         $this->createLogin();
@@ -208,12 +220,12 @@ class TaskControllerTest extends ControllerTest
         $this->client->submit($form);
 
         $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
-        $expectedTimestamp = (int)(((new DateTime())->getTimestamp())/10);
+        $expectedTimestamp = (int)(((new DateTime())->getTimestamp())/100);
         $createdAtTimestamp = (int)(
             ($taskRepository->findOneBy(['title' => 'A new title task'])
-                ->getCreatedAt()->getTimestamp())/10);
+                ->getCreatedAt()->getTimestamp())/100);
 
-        $this->assertSame($expectedTimestamp, $createdAtTimestamp);
+        $this->assertSame($expectedTimestamp, $createdAtTimestamp, "BE CARFUL This test can fail 1 out of 100");
     }
 
     public function testTaskCreateSetUser()
@@ -469,7 +481,7 @@ class TaskControllerTest extends ControllerTest
         $taskAfter = $taskRepository->findOneBy(['id' => $id]);
 
         $this->assertSame(true, (bool)$taskAfter, "Task should not be delete");
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+        $this->assertResponseRedirects('/login');
     }
 
     public function testTaskDeleteNotAccessibleForTaskNotBelongToAdmin()
@@ -477,15 +489,16 @@ class TaskControllerTest extends ControllerTest
         $this->createLogin('Admin');
 
         $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
-        $id =  $this->getUndeletedIds()[0];
+        $id = $this->getUndeletedIds()[0];
 
         $this->client->request('POST', '/tasks/'.$id.'/delete', [
             "_token" => 'token'
         ]);
+
         $taskAfter = $taskRepository->findOneBy(['id' => $id]);
 
         $this->assertSame(true, (bool)$taskAfter, "Task should not be delete");
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+        $this->assertResponseRedirects('/login');
     }
 
     public function testTaskUserDeleteWithWrongToken()
@@ -544,7 +557,6 @@ class TaskControllerTest extends ControllerTest
 
             return $extract[0];
         }
-
         if($method === 'POST' && $action === 'toggle') {
             $extract = $crawler->filter('form[action="/tasks/1/'.$action.'"]>input[name="_token"]')->extract(['value']);
 
@@ -555,7 +567,7 @@ class TaskControllerTest extends ControllerTest
             $extract = $crawler->filter('h4.isDoneLink>a')->extract(['href']);
             $url = $extract[0];
 
-            return strstr(str_replace('_token=', '', strstr($url, '_token=')), '>', true);
+            return str_replace('_token=', '', strstr($url, '_token='));
         }
     }
 

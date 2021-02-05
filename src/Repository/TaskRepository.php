@@ -22,7 +22,7 @@ class TaskRepository extends ServiceEntityRepository
     /**
      * @return Task[] Returns an array of Task objects
      */
-    public function findTasksIsDone()
+    public function findTasksIsDone(): array
     {
         return $this->createQueryBuilder('t')
             ->Where('t.isDone = :val')

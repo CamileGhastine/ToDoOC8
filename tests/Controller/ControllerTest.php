@@ -21,7 +21,7 @@ class ControllerTest extends WebTestCase
 
     public function setUp(): void
     {
-        $this->client = static::createClient();
+        $this->client = $this->createClient();
     }
 
     protected function CreateLogin($role='user')
@@ -37,6 +37,6 @@ class ControllerTest extends WebTestCase
 
     public function testToAvoidWarningWhenTesting()
     {
-        static::assertSame(1, 1);
+        $this->assertSame(1, 1);
     }
 }

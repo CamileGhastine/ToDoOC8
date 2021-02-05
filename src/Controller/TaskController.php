@@ -22,7 +22,9 @@ class TaskController extends AbstractController
      */
     public function listAction(): Response
     {
-        $this->denyAccessUnlessGranted('CONNECT');
+        if (!$this->isGranted('USER_CONNECT')) {
+            return $this->redirectToRoute('app_login');
+        }
 
         return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findAll()]);
     }
@@ -34,7 +36,9 @@ class TaskController extends AbstractController
      */
     public function taskIsDoneAction(TaskRepository $taskRepository): Response
     {
-        $this->denyAccessUnlessGranted('CONNECT');
+        if (!$this->isGranted('USER_CONNECT')) {
+            return $this->redirectToRoute('app_login');
+        }
 
         return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findTasksIsDone()]);
     }
@@ -48,7 +52,9 @@ class TaskController extends AbstractController
      */
     public function createAction(Request $request, TaskFormHandler $handleForm)
     {
-        $this->denyAccessUnlessGranted('CONNECT');
+        if (!$this->isGranted('USER_CONNECT')) {
+            return $this->redirectToRoute('app_login');
+        }
 
         $task = new Task($this->getUser());
         /** @var Form $form */
@@ -72,7 +78,9 @@ class TaskController extends AbstractController
      */
     public function editAction(Request $request, Task $task, TaskFormHandler $handleForm)
     {
-        $this->denyAccessUnlessGranted('EDIT', $task);
+        if (!$this->isGranted('TASK_EDIT', $task)) {
+            return $this->redirectToRoute('app_login');
+        }
 
         /** @var Form $form */
         $form = $this->createForm(TaskType::class, $task);
@@ -96,8 +104,9 @@ class TaskController extends AbstractController
      */
     public function toggleTaskAction(Request $request, Task $task, ToggleTokenHandler $toggleTokenHandler): RedirectResponse
     {
-        $this->denyAccessUnlessGranted('CONNECT');
-
+        if (!$this->isGranted('USER_CONNECT')) {
+            return $this->redirectToRoute('app_login');
+        }
         if (!$toggleTokenHandler->checkToken($request)) {
             return $this->redirectToRoute('app_logout');
         }
@@ -119,7 +128,9 @@ class TaskController extends AbstractController
      */
     public function deleteTaskAction(Task $task, Request $request, CsrfTokenManagerInterface $tokenManager): RedirectResponse
     {
-        $this->denyAccessUnlessGranted('DELETE', $task);
+        if (!$this->isGranted('TASK_DELETE', $task)) {
+            return $this->redirectToRoute('app_login');
+        }
 
         if ($tokenManager->getToken('delete'.$task->getId())->getValue() !== $request->request->get('_token')) {
             return $this->redirectToRoute('app_logout');

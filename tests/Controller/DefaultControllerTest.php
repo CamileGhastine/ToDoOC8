@@ -11,14 +11,14 @@ class DefaultControllerTest extends ControllerTest
     {
         $this->client->request('GET', '/');
 
-        static::assertResponseRedirects('/login', Response::HTTP_FOUND);
+        $this->assertResponseRedirects('/login', Response::HTTP_FOUND);
     }
 
     public function testHomePageAccessibleToUser()
     {
         $this->createLogin();
         $this->client->request('GET', '/');
-        static::assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     public function testHomePageView()
@@ -26,6 +26,6 @@ class DefaultControllerTest extends ControllerTest
         $this->createLogin();
         $crawler = $this->client->request('GET', '/');
 
-        static::assertSame(3, $crawler->filter('div.home>div>a.btn')->count());
+        $this->assertSame(3, $crawler->filter('div.home>div>a.btn')->count());
     }
 }

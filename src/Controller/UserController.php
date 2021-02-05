@@ -23,7 +23,9 @@ class UserController extends AbstractController
      */
     public function listAction()
     {
-        $this->denyAccessUnlessGranted('ADMIN');
+        if (!$this->isGranted('USER_ADMIN')) {
+            return $this->redirectToRoute('homepage');
+        }
 
         return $this->render('user/list.html.twig', ['users' => $this->getDoctrine()->getRepository('App:User')->findAll()]);
     }
@@ -40,7 +42,6 @@ class UserController extends AbstractController
 
         /** @var Form $form */
         $form = $this->createForm(UserType::class, $user);
-
         if ($userFormHandler->handle($request, $form, $user)) {
             return $this->redirectToRoute('app_login');
         }
@@ -57,7 +58,9 @@ class UserController extends AbstractController
      */
     public function editAction(User $user, Request $request, UserFormHandler $userFormHandler)
     {
-        $this->denyAccessUnlessGranted('ADMIN');
+        if (!$this->isGranted('USER_ADMIN')) {
+            return $this->redirectToRoute('homepage');
+        }
 
         /** @var Form $form */
         $form = $this->createForm(UserType::class, $user);

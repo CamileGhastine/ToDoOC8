@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Task;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -13,7 +12,9 @@ class DefaultController extends AbstractController
      */
     public function indexAction()
     {
-        $this->denyAccessUnlessGranted('CONNECT');
+        if(!$this->isGranted('USER_CONNECT')){
+            return $this->redirectToRoute('app_login');
+        }
 
         return $this->render('default/index.html.twig');
     }
