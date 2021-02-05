@@ -3,7 +3,6 @@
 
 namespace App\Tests\Security\Voter;
 
-
 use App\Entity\Task;
 use App\Entity\User;
 use App\Security\Voter\UserVoter;
@@ -43,6 +42,5 @@ class UserVoterTest extends WebTestCase
         $result = $voteOnAttribute->invoke($userVoter, 'TASK_WRONG', new Task(), $this->tokenInterface);
 
         $this->assertSame(false, $result);
-
     }
 }

@@ -11,12 +11,10 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class TaskFixtures extends Fixture implements dependentFixtureInterface
 {
-    CONST NAMES = ['Admin', 'Camile', null];
+    const NAMES = ['Admin', 'Camile', null];
 
     public function load(ObjectManager $manager)
     {
-
-
         for ($i=1; $i<=3; $i++) {
             $task = new Task();
 
@@ -25,7 +23,7 @@ class TaskFixtures extends Fixture implements dependentFixtureInterface
             $task->setTitle('tâche n°'.$i);
             $task->setContent('la tâche n°'.$i.' est très importante');
             $task->setCreatedAt(new DateTime());
-            $task->toggle(rand(0,1));
+            $task->toggle(rand(0, 1));
             if ($name) {
                 $task->setUser($this->getReference($name));
             }
@@ -42,7 +40,7 @@ class TaskFixtures extends Fixture implements dependentFixtureInterface
             $task->setTitle('tâche n°'.$i);
             $task->setContent('la tâche n°'.$i.' est très importante');
             $task->setCreatedAt(new DateTime());
-            $task->toggle(rand(0,1));
+            $task->toggle(rand(0, 1));
             if ($user) {
                 $task->setUser($user);
             }

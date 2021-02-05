@@ -70,7 +70,7 @@ class SecurityControllerTest extends ControllerTest
     public function testLogoutSessionClose()
     {
         $this->createlogin();
-         $this->client->request('GET', '/logout');
+        $this->client->request('GET', '/logout');
 
         // No user registered in session
         $this->assertSame(false, (bool)$this->client->getContainer()->get('session')->get('_security_main'));

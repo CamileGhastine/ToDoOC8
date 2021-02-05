@@ -7,7 +7,6 @@ use DateTime;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Component\HttpFoundation\Response;
 
-
 class TaskControllerTest extends ControllerTest
 {
     use FixturesTrait;
@@ -19,7 +18,7 @@ class TaskControllerTest extends ControllerTest
         $this->loadFixtures([TaskFixtures::class]);
         $UserRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
 
-        for($i=1; $i<=3; $i++) {
+        for ($i=1; $i<=3; $i++) {
             $expected = $i<3 ? $i : null;
             $task = $UserRepository->findOneById($i);
 
@@ -126,12 +125,12 @@ class TaskControllerTest extends ControllerTest
         );
         $this->assertSame(
             'A new title task',
-            $taskRepository->findBy([], ['id' => 'desc'],1)[0]->getTitle(),
+            $taskRepository->findBy([], ['id' => 'desc'], 1)[0]->getTitle(),
             "Title not well register in DB"
         );
         $this->assertSame(
             'A new content task',
-            $taskRepository->findBy([], ['id' => 'desc'],1)[0]->getContent(),
+            $taskRepository->findBy([], ['id' => 'desc'], 1)[0]->getContent(),
             "Content not well register in DB"
         );
         $this->assertResponseRedirects(
@@ -174,7 +173,7 @@ class TaskControllerTest extends ControllerTest
         $crawler = $this->client->request('GET', '/tasks/create');
 
         $title='';
-        for($i=0; $i<51;$i++) {
+        for ($i=0; $i<51;$i++) {
             $title .='a';
         }
 
@@ -208,7 +207,8 @@ class TaskControllerTest extends ControllerTest
 
         $this->assertSame(
             false,
-            $taskRepository->findOneBy(['title' => 'A new title task'])->isDone());
+            $taskRepository->findOneBy(['title' => 'A new title task'])->isDone()
+        );
     }
 
     //This test is not conform. It can fail 1 ouf of 100
@@ -223,7 +223,8 @@ class TaskControllerTest extends ControllerTest
         $expectedTimestamp = (int)(((new DateTime())->getTimestamp())/100);
         $createdAtTimestamp = (int)(
             ($taskRepository->findOneBy(['title' => 'A new title task'])
-                ->getCreatedAt()->getTimestamp())/100);
+                ->getCreatedAt()->getTimestamp())/100
+        );
 
         $this->assertSame($expectedTimestamp, $createdAtTimestamp, "BE CARFUL This test can fail 1 out of 100");
     }
@@ -341,7 +342,6 @@ class TaskControllerTest extends ControllerTest
         $this->client->submit($form);
 
         $this->assertSelectorExists('li:contains("Vous devez saisir un titre")');
-
     }
 
     public function testTaskToggleInaccessibleToAnonymous()
@@ -407,7 +407,7 @@ class TaskControllerTest extends ControllerTest
         $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
         $isDoneBefore = $taskRepository->findOneBy(['id' => '1'])->isDone();
 
-        $this->client->request('POST', '/tasks/1/toggle',[
+        $this->client->request('POST', '/tasks/1/toggle', [
             '_token' => 'wrong_token'
         ]);
 
@@ -523,8 +523,7 @@ class TaskControllerTest extends ControllerTest
     {
         $deletedId = $this->getDeletedIds();
         $undeleteId = [];
-        for($i=1; $i<=10; $i++) {
-
+        for ($i=1; $i<=10; $i++) {
             if (!in_array($i, $deletedId)) {
                 $undeleteId[] = $i;
             }
@@ -542,7 +541,6 @@ class TaskControllerTest extends ControllerTest
         $deletedIds = [];
         foreach ($extract as $i => $id) {
             $deletedIds[]= substr($id, 0, 1);
-
         }
 
         return $deletedIds;
@@ -552,18 +550,18 @@ class TaskControllerTest extends ControllerTest
     {
         $crawler = $this->client->request('GET', '/tasks');
 
-        if($method === 'POST' && $action === 'delete') {
+        if ($method === 'POST' && $action === 'delete') {
             $extract = $crawler->filter('form[action="/tasks/'.$id.'/'.$action.'"]>input[name="_token"]')->extract(['value']);
 
             return $extract[0];
         }
-        if($method === 'POST' && $action === 'toggle') {
+        if ($method === 'POST' && $action === 'toggle') {
             $extract = $crawler->filter('form[action="/tasks/1/'.$action.'"]>input[name="_token"]')->extract(['value']);
 
             return $extract[0];
         }
 
-        if($method === 'GET') {
+        if ($method === 'GET') {
             $extract = $crawler->filter('h4.isDoneLink>a')->extract(['href']);
             $url = $extract[0];
 

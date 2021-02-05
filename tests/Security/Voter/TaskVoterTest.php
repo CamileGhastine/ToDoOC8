@@ -3,7 +3,6 @@
 
 namespace App\Tests\Security\Voter;
 
-
 use App\Entity\Task;
 use App\Entity\User;
 use App\Security\Voter\TaskVoter;
@@ -11,7 +10,6 @@ use Liip\TestFixturesBundle\Test\FixturesTrait;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
 
 //Test private class is foolish. I just did for training.
 class TaskVoterTest extends WebTestCase

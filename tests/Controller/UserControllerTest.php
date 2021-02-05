@@ -85,7 +85,7 @@ class UserControllerTest extends ControllerTest
         $this->client->submit($form);
         $this->client->followRedirect();
 
-        $this->assertRouteSame('app_login',[], "Not app_login route after redirection");
+        $this->assertRouteSame('app_login', [], "Not app_login route after redirection");
         $this->assertSelectorExists('div.alert.alert-success', "No div alert-success");
     }
 
@@ -224,7 +224,7 @@ class UserControllerTest extends ControllerTest
         $this->client->submit($form);
         $this->client->followRedirect();
 
-        $this->assertRouteSame('user_list',[], "Not app_login route after redirection");
+        $this->assertRouteSame('user_list', [], "Not app_login route after redirection");
         $this->assertSelectorExists('div.alert.alert-success', "No div alert-success");
     }
 

@@ -203,7 +203,6 @@ class UserTest extends KernelTestCase
 
         $user->removeTask($task);
         $this->assertSame(null, $user->getTasks()[0]);
-
     }
 
     public function testSetGetToken()

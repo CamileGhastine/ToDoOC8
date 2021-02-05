@@ -12,7 +12,7 @@ class DefaultController extends AbstractController
      */
     public function indexAction()
     {
-        if(!$this->isGranted('USER_CONNECT')){
+        if (!$this->isGranted('USER_CONNECT')) {
             return $this->redirectToRoute('app_login');
         }
 

@@ -38,7 +38,7 @@ class TaskVoter extends Voter
             return true ;
         }
 
-        if(!$task->getUser()) {
+        if (!$task->getUser()) {
             return false;
         }
 
