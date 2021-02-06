@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Tests\Security\Voter;
 
 use App\Entity\Task;
@@ -14,15 +13,16 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 //Test private class is foolish. I just did for training.
 class UserVoterTest extends WebTestCase
 {
+    use FixturesTrait;
+
     private $tokenInterface;
 
     public function setUp(): void
     {
-        $this->tokenInterface = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')
+        $this->tokenInterface = $this
+            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')
             ->getMock();
     }
-
-    use FixturesTrait;
 
     // voteOnAttribute become public
     protected static function getMethod($name): ReflectionMethod

@@ -18,11 +18,13 @@ class TaskControllerTest extends ControllerTest
         $this->loadFixtures([TaskFixtures::class]);
         $UserRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
 
-        for ($i=1; $i<=3; $i++) {
-            $expected = $i<3 ? $i : null;
+        for ($i = 1; $i <= 3; $i++) {
+            $expected = $i < 3 ? $i : null;
             $task = $UserRepository->findOneById($i);
 
-            $this->assertSame($expected, $i<3 ? $task->getUser()->getId() : $task->getUser(), "Not good user for task fixtures test");
+            $this->assertSame($expected, $i < 3
+                ? $task->getUser()->getId()
+                : $task->getUser(), "Not good user for task fixtures test");
         }
     }
 
@@ -120,7 +122,7 @@ class TaskControllerTest extends ControllerTest
 
         $this->assertEquals(
             count($taskRepository->findAll()),
-            $countTasksBefore +1,
+            $countTasksBefore + 1,
             "Task not register in DB"
         );
         $this->assertSame(
@@ -172,9 +174,9 @@ class TaskControllerTest extends ControllerTest
         $this->createLogin();
         $crawler = $this->client->request('GET', '/tasks/create');
 
-        $title='';
-        for ($i=0; $i<51;$i++) {
-            $title .='a';
+        $title = '';
+        for ($i = 0; $i < 51; $i++) {
+            $title .= 'a';
         }
 
         $form = $this->fillForm($crawler);
@@ -220,10 +222,10 @@ class TaskControllerTest extends ControllerTest
         $this->client->submit($form);
 
         $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
-        $expectedTimestamp = (int)(((new DateTime())->getTimestamp())/100);
+        $expectedTimestamp = (int)(((new DateTime())->getTimestamp()) / 100);
         $createdAtTimestamp = (int)(
             ($taskRepository->findOneBy(['title' => 'A new title task'])
-                ->getCreatedAt()->getTimestamp())/100
+                ->getCreatedAt()->getTimestamp()) / 100
         );
 
         $this->assertSame($expectedTimestamp, $createdAtTimestamp, "BE CARFUL This test can fail 1 out of 100");
@@ -314,7 +316,7 @@ class TaskControllerTest extends ControllerTest
         );
         $this->assertSame(
             'An edit title task',
-            $taskRepository->findOneBy(['id' =>1])->getTitle(),
+            $taskRepository->findOneBy(['id' => 1])->getTitle(),
             "Title edition problem"
         );
         $this->assertSame(
@@ -359,7 +361,7 @@ class TaskControllerTest extends ControllerTest
         $isDoneBefore = $taskRepository->findOneBy(['id' => '1'])->isDone();
 
         $this->client->request('POST', '/tasks/1/toggle', [
-            '_token'=>$this->getToken('POST', 'toggle')
+            '_token' => $this->getToken('POST', 'toggle')
         ]);
         $this->client->followRedirect();
 
@@ -376,7 +378,7 @@ class TaskControllerTest extends ControllerTest
         $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
         $isDoneBefore = $taskRepository->findOneBy(['id' => '1'])->isDone();
 
-        $this->client->request('GET', '/tasks/1/toggle?_token='.$this->getToken('GET'));
+        $this->client->request('GET', '/tasks/1/toggle?_token=' . $this->getToken('GET'));
         $this->client->followRedirect();
 
         $isDoneAfter = $taskRepository->findOneBy(['id' => '1'])->isDone();
@@ -431,7 +433,7 @@ class TaskControllerTest extends ControllerTest
         $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
         $id =  $this->getDeletedIds()[0];
 
-        $this->client->request('POST', '/tasks/'.$id.'/delete', [
+        $this->client->request('POST', '/tasks/' . $id . '/delete', [
             "_token" => $this->getToken('POST', 'delete', $id)
         ]);
 
@@ -474,7 +476,7 @@ class TaskControllerTest extends ControllerTest
         $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
         $id =  $this->getUndeletedIds()[0];
 
-        $this->client->request('POST', '/tasks/'.$id.'/delete', [
+        $this->client->request('POST', '/tasks/' . $id . '/delete', [
             "_token" => 'token'
         ]);
 
@@ -491,7 +493,7 @@ class TaskControllerTest extends ControllerTest
         $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
         $id = $this->getUndeletedIds()[0];
 
-        $this->client->request('POST', '/tasks/'.$id.'/delete', [
+        $this->client->request('POST', '/tasks/' . $id . '/delete', [
             "_token" => 'token'
         ]);
 
@@ -508,7 +510,7 @@ class TaskControllerTest extends ControllerTest
         $taskRepository = $this->getContainer()->get('doctrine')->getRepository('App:Task');
         $id =  $this->getDeletedIds()[0];
 
-        $this->client->request('POST', '/tasks/'.$id.'/delete', [
+        $this->client->request('POST', '/tasks/' . $id . '/delete', [
             "_token" => 'wrong_token'
         ]);
 
@@ -523,7 +525,7 @@ class TaskControllerTest extends ControllerTest
     {
         $deletedId = $this->getDeletedIds();
         $undeleteId = [];
-        for ($i=1; $i<=10; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             if (!in_array($i, $deletedId)) {
                 $undeleteId[] = $i;
             }
@@ -540,7 +542,7 @@ class TaskControllerTest extends ControllerTest
 
         $deletedIds = [];
         foreach ($extract as $i => $id) {
-            $deletedIds[]= substr($id, 0, 1);
+            $deletedIds[] = substr($id, 0, 1);
         }
 
         return $deletedIds;
@@ -551,12 +553,15 @@ class TaskControllerTest extends ControllerTest
         $crawler = $this->client->request('GET', '/tasks');
 
         if ($method === 'POST' && $action === 'delete') {
-            $extract = $crawler->filter('form[action="/tasks/'.$id.'/'.$action.'"]>input[name="_token"]')->extract(['value']);
+            $extract = $crawler
+                ->filter('form[action="/tasks/' . $id . '/' . $action . '"]>input[name="_token"]')
+                ->extract(['value']);
 
             return $extract[0];
         }
         if ($method === 'POST' && $action === 'toggle') {
-            $extract = $crawler->filter('form[action="/tasks/1/'.$action.'"]>input[name="_token"]')->extract(['value']);
+            $extract = $crawler
+                ->filter('form[action="/tasks/1/' . $action . '"]>input[name="_token"]')->extract(['value']);
 
             return $extract[0];
         }

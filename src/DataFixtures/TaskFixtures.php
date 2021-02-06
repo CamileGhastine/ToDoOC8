@@ -11,17 +11,17 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class TaskFixtures extends Fixture implements dependentFixtureInterface
 {
-    const NAMES = ['Admin', 'Camile', null];
+    private const NAMES = ['Admin', 'Camile', null];
 
     public function load(ObjectManager $manager)
     {
-        for ($i=1; $i<=3; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
             $task = new Task();
 
-            $name = self::NAMES[$i-1];
+            $name = self::NAMES[$i - 1];
 
-            $task->setTitle('tâche n°'.$i);
-            $task->setContent('la tâche n°'.$i.' est très importante');
+            $task->setTitle('tâche n°' . $i);
+            $task->setContent('la tâche n°' . $i . ' est très importante');
             $task->setCreatedAt(new DateTime());
             $task->toggle(rand(0, 1));
             if ($name) {
@@ -31,14 +31,14 @@ class TaskFixtures extends Fixture implements dependentFixtureInterface
             $manager->persist($task);
         }
 
-        for ($i=4; $i<=10; $i++) {
+        for ($i = 4; $i <= 10; $i++) {
             $task = new Task();
 
             /** @var User $user */
             $user = $this->getUser();
 
-            $task->setTitle('tâche n°'.$i);
-            $task->setContent('la tâche n°'.$i.' est très importante');
+            $task->setTitle('tâche n°' . $i);
+            $task->setContent('la tâche n°' . $i . ' est très importante');
             $task->setCreatedAt(new DateTime());
             $task->toggle(rand(0, 1));
             if ($user) {

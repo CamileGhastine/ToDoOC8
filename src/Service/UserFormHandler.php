@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service;
 
 use App\Entity\User;
@@ -17,8 +16,11 @@ class UserFormHandler
     private $flash;
     private $flashMessage =  "L'utilisateur a bien été modifié avec succès.";
 
-    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, FlashBagInterface $flash)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        UserPasswordEncoderInterface $passwordEncoder,
+        FlashBagInterface $flash
+    ) {
         $this->em = $em;
         $this->passwordEncoder = $passwordEncoder;
         $this->flash = $flash;

@@ -37,7 +37,8 @@
     "require-dev": {
         "liip/test-fixtures-bundle": "^1.11",
         "symfony/maker-bundle": "^1.25",
-        "theofidry/alice-data-fixtures": "^1.2"
+        "theofidry/alice-data-fixtures": "^1.2",
+        "squizlabs/php_codesniffer": "3.*"
     },
     "config": {
         "optimize-autoloader": true,

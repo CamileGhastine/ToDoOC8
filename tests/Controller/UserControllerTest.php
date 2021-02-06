@@ -1,19 +1,11 @@
 <?php
 
-
 namespace App\Tests\Controller;
 
 use App\DataFixtures\UserFixtures;
 use App\Entity\User;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
-use Prophecy\Argument\Token\AnyValuesToken;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use Symfony\Component\Security\Csrf\TokenStorage\SessionTokenStorage;
-use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
 
 class UserControllerTest extends ControllerTest
 {
@@ -238,8 +230,8 @@ class UserControllerTest extends ControllerTest
         $crawler = $this->client->request('GET', '/users/2/edit');
         $form = $crawler->selectButton('Modifier')->form();
         $form['user[username]'] = 'usernameEdited';
-        $form['user[email]'] ='emailedited@todoco.fr';
-        $form['user[role]'] ='ROLE_ADMIN';
+        $form['user[email]'] = 'emailedited@todoco.fr';
+        $form['user[role]'] = 'ROLE_ADMIN';
         $this->client->submit($form);
 
         $NumberUsersAfterSubmit = count($userRepository->findAll());
@@ -319,7 +311,7 @@ class UserControllerTest extends ControllerTest
 
         $form = $crawler->selectButton('Ajouter')->form();
         $form['user[username]'] = $username;
-        $form['user[email]'] = $username.'@todoco.fr';
+        $form['user[email]'] = $username . '@todoco.fr';
         $form['user[password][first]'] = 'Password1';
         $form['user[password][second]'] = 'Password1';
         $form['user[_token]'] = $token;

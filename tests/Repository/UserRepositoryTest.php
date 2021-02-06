@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Tests\Repository;
 
 use App\DataFixtures\UserFixtures;
@@ -21,7 +20,7 @@ class UserRepositoryTest extends KernelTestCase
 
     public function testCount()
     {
-        $users= $this->getRepository()->count([]);
+        $users = $this->getRepository()->count([]);
         $this->assertEquals(2, $users);
     }
 }

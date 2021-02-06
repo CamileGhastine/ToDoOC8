@@ -26,7 +26,10 @@ class TaskController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findAll()]);
+        return $this->render(
+            'task/list.html.twig',
+            ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findAll()]
+        );
     }
 
     /**
@@ -89,10 +92,10 @@ class TaskController extends AbstractController
             return $this->redirectToRoute('task_list');
         }
 
-        return $this->render('task/edit.html.twig', [
-            'form' => $form->createView(),
-            'task' => $task,
-        ]);
+        return $this->render(
+            'task/edit.html.twig',
+            ['form' => $form->createView(),'task' => $task,]
+        );
     }
 
     /**
@@ -102,8 +105,11 @@ class TaskController extends AbstractController
      * @param ToggleTokenHandler $toggleTokenHandler
      * @return RedirectResponse
      */
-    public function toggleTaskAction(Request $request, Task $task, ToggleTokenHandler $toggleTokenHandler): RedirectResponse
-    {
+    public function toggleTaskAction(
+        Request $request,
+        Task $task,
+        ToggleTokenHandler $toggleTokenHandler
+    ): RedirectResponse {
         if (!$this->isGranted('USER_CONNECT')) {
             return $this->redirectToRoute('app_login');
         }
@@ -126,13 +132,16 @@ class TaskController extends AbstractController
      * @param CsrfTokenManagerInterface $tokenManager
      * @return RedirectResponse
      */
-    public function deleteTaskAction(Task $task, Request $request, CsrfTokenManagerInterface $tokenManager): RedirectResponse
-    {
+    public function deleteTaskAction(
+        Task $task,
+        Request $request,
+        CsrfTokenManagerInterface $tokenManager
+    ): RedirectResponse {
         if (!$this->isGranted('TASK_DELETE', $task)) {
             return $this->redirectToRoute('app_login');
         }
 
-        if ($tokenManager->getToken('delete'.$task->getId())->getValue() !== $request->request->get('_token')) {
+        if ($tokenManager->getToken('delete' . $task->getId())->getValue() !== $request->request->get('_token')) {
             return $this->redirectToRoute('app_logout');
         }
 

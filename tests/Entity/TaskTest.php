@@ -9,7 +9,7 @@ use Symfony\Component\Validator\ConstraintViolation;
 
 class TaskTest extends KernelTestCase
 {
-    private function getTask() : Task
+    private function getTask(): Task
     {
         return (new Task())
             ->setTitle('Title')
@@ -22,10 +22,10 @@ class TaskTest extends KernelTestCase
         self::bootKernel();
         $errors = self::$container->get('validator')->validate($task);
 
-        $messages=[];
+        $messages = [];
         /** @var ConstraintViolation $error */
         foreach ($errors as $error) {
-            $messages[] = $error->getPropertyPath().' => '. $error->getMessage();
+            $messages[] = $error->getPropertyPath() . ' => ' . $error->getMessage();
         }
 
         $this->assertCount($number, $errors, implode(' - ', $messages));
@@ -72,12 +72,12 @@ class TaskTest extends KernelTestCase
     public function testLongTitle()
     {
         $title50 = '';
-        for ($i=0; $i<50; $i++) {
-            $title50.='a';
+        for ($i = 0; $i < 50; $i++) {
+            $title50 .= 'a';
         }
 
         $task = ($this->getTask())
-            ->setTitle($title50.'a');
+            ->setTitle($title50 . 'a');
         $this->assertHasErrors(1, $task);
 
         // Title reach limit of 50 characters

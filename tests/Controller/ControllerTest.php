@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Tests\Controller;
 
 use App\DataFixtures\TaskFixtures;
@@ -23,7 +22,7 @@ class ControllerTest extends WebTestCase
         $this->client = $this->createClient();
     }
 
-    protected function CreateLogin($role='user')
+    protected function createLogin($role = 'user')
     {
         $name = $role === 'Admin' ? 'Admin' : 'Camile';
         $users = $this->loadFixtures([UserFixtures::class, TaskFixtures::class]);

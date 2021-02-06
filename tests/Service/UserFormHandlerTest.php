@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Tests\Service;
 
 use App\Entity\User;
@@ -29,7 +28,8 @@ class UserFormHandlerTest extends KernelTestCase
         $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManagerInterface')
             ->getMock();
 
-        $this->passwordEncoder = $this->getMockBuilder('Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface')
+        $this->passwordEncoder = $this
+            ->getMockBuilder('Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface')
             ->getMock();
 
         $this->flash = $this->getMockBuilder('Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface')

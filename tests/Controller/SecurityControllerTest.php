@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Tests\Controller;
 
 use App\DataFixtures\UserFixtures;
@@ -30,7 +29,11 @@ class SecurityControllerTest extends ControllerTest
 
         $this->assertSelectorExists('form', 'No <Form>');
         $this->assertSame(3, $crawler->filter('input')->count(), 'Count <input> != 2');
-        $this->assertSame(1, $crawler->filter('label:contains("Nom d\'utilisateur :")')->count(), 'No <label> for username');
+        $this->assertSame(
+            1,
+            $crawler->filter('label:contains("Nom d\'utilisateur :")')->count(),
+            'No <label> for username'
+        );
         $this->assertSame(1, $crawler->filter('label:contains("Mot de passe :")')->count(), 'No <label> for password');
         $this->assertSelectorTextSame('button', 'Se connecter', 'No button <submit> Se connecter');
     }
@@ -50,7 +53,11 @@ class SecurityControllerTest extends ControllerTest
     {
         $this->submitForm('Camile', 'wrong password');
 
-        $this->assertSelectorTextContains('.alert.alert-danger', 'Identifiants invalides.', 'No class alert and alert-danger');
+        $this->assertSelectorTextContains(
+            '.alert.alert-danger',
+            'Identifiants invalides.',
+            'No class alert and alert-danger'
+        );
         $this->assertInputValueSame('username', 'Camile', 'No expected input value');
         $this->assertRouteSame('app_login');
     }

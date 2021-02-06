@@ -34,7 +34,7 @@ class TaskVoter extends Voter
 
     private function canDelete($task, $user): bool
     {
-        if (!$task->getUser() && $user->getRole()=== 'ROLE_ADMIN') {
+        if (!$task->getUser() && $user->getRole() === 'ROLE_ADMIN') {
             return true ;
         }
 

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Tests\Entity;
 
 use App\DataFixtures\UserFixtures;
@@ -28,10 +27,10 @@ class UserTest extends KernelTestCase
         self::bootKernel();
         $errors = self::$container->get('validator')->validate($user);
 
-        $messages=[];
+        $messages = [];
         /** @var ConstraintViolation $error */
         foreach ($errors as $error) {
-            $messages[] = $error->getPropertyPath().' => '. $error->getMessage();
+            $messages[] = $error->getPropertyPath() . ' => ' . $error->getMessage();
         }
 
         static::assertCount($number, $errors, implode(' - ', $messages));
@@ -65,12 +64,12 @@ class UserTest extends KernelTestCase
     public function testLongUsername()
     {
         $username25 = '';
-        for ($i=0; $i<25; $i++) {
-            $username25.='a';
+        for ($i = 0; $i < 25; $i++) {
+            $username25 .= 'a';
         }
 
         $user = ($this->getUser())
-            ->setUsername($username25.'a');
+            ->setUsername($username25 . 'a');
         $this->assertHasErrors(1, $user);
 
         // Username reach limit of 25 characters
@@ -124,11 +123,11 @@ class UserTest extends KernelTestCase
     public function testLongPassword()
     {
         $password25 = 'A1';
-        for ($i=0; $i<98; $i++) {
-            $password25.='a';
+        for ($i = 0; $i < 98; $i++) {
+            $password25 .= 'a';
         }
         $user = ($this->getUser())
-            ->setPassword($password25.'a');
+            ->setPassword($password25 . 'a');
         $this->assertHasErrors(1, $user);
 
         // password reach limit of 100 characters
