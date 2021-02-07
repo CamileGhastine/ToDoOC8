@@ -16,39 +16,42 @@ class TaskFixtures extends Fixture implements dependentFixtureInterface
     public function load(ObjectManager $manager)
     {
         for ($i = 1; $i <= 3; $i++) {
-            $task = new Task();
 
             $name = self::NAMES[$i - 1];
 
-            $task->setTitle('tâche n°' . $i);
-            $task->setContent('la tâche n°' . $i . ' est très importante');
-            $task->setCreatedAt(new DateTime());
-            $task->toggle(rand(0, 1));
-            if ($name) {
-                $task->setUser($this->getReference($name));
-            }
+            /** @var User $user */
+            $user = $name ? $user = $this->getReference($name) : false ;
+
+            $task = $this->setTask($user, $i);
 
             $manager->persist($task);
         }
 
         for ($i = 4; $i <= 10; $i++) {
-            $task = new Task();
-
             /** @var User $user */
             $user = $this->getUser();
 
-            $task->setTitle('tâche n°' . $i);
-            $task->setContent('la tâche n°' . $i . ' est très importante');
-            $task->setCreatedAt(new DateTime());
-            $task->toggle(rand(0, 1));
-            if ($user) {
-                $task->setUser($user);
-            }
+            $task = $this->setTask($user, $i);
 
             $manager->persist($task);
         }
 
         $manager->flush();
+    }
+
+    private function setTask($user, int $i)
+    {
+        $task = new Task();
+
+        $task->setTitle('tâche n°' . $i);
+        $task->setContent('la tâche n°' . $i . ' est très importante');
+        $task->setCreatedAt(new DateTime());
+        $task->toggle(rand(0, 1));
+        if ($user) {
+            $task->setUser($user);
+        }
+
+        return $task;
     }
 
     /**
