@@ -6,24 +6,24 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserFormHandler
 {
     private $em;
     private $passwordEncoder;
-    private $flash;
+    private $session;
     private $flashMessage =  "L'utilisateur a bien été modifié avec succès.";
 
     public function __construct(
         EntityManagerInterface $em,
         UserPasswordEncoderInterface $passwordEncoder,
-        FlashBagInterface $flash
+        SessionInterface $session
     ) {
         $this->em = $em;
         $this->passwordEncoder = $passwordEncoder;
-        $this->flash = $flash;
+        $this->session = $session;
     }
 
     public function handle(Request $request, Form $form, User $user): bool
@@ -42,7 +42,7 @@ class UserFormHandler
             $this->flashMessage = "L'utilisateur a bien été ajouté avec succès.";
         }
 
-        $this->flash->add('success', $this->flashMessage);
+        $this->session->getBag('flashes')->add('success', $this->flashMessage);
 
         $this->em->flush();
 

@@ -14,10 +14,11 @@ class TaskFormHandlerTest extends KernelTestCase
 
     private $form;
     private $em;
-    private $flash;
+    private $session;
+    private $sessionBag;
     private $request;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()
@@ -27,7 +28,12 @@ class TaskFormHandlerTest extends KernelTestCase
         $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManagerInterface')
             ->getMock();
 
-        $this->flash = $this->getMockBuilder('Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface')
+        $this->session = $this->getMockBuilder('Symfony\Component\HttpFoundation\Session\SessionInterface')
+            ->setMethods(['start', 'getId', 'setId', 'getName', 'setName', 'invalidate', 'migrate', 'save', 'has', 'get', 'set', 'all', 'replace', 'remove', 'clear', 'isStarted', 'registerBag', 'getBag', 'getMetadataBag'])
+            ->getMock();
+
+        $this->sessionBag = $this->getMockBuilder('Symfony\Component\HttpFoundation\Session')
+            ->setMethods(['add'])
             ->getMock();
 
         $this->request = new Request();
@@ -69,7 +75,7 @@ class TaskFormHandlerTest extends KernelTestCase
     {
         $this->setFormMethods($task, $submitted, $valid);
 
-        $handleForm = new TaskFormHandler($this->em, $this->flash);
+        $handleForm = new TaskFormHandler($this->em, $this->session);
         return $handleForm->handle($this->request, $this->form, $task);
     }
 
@@ -83,7 +89,9 @@ class TaskFormHandlerTest extends KernelTestCase
         $this->em->expects($this->$submittedValidCreateForm())->method('persist');
         $this->em->expects($this->$submittedValidTrue())->method('flush');
 
-        $this->flash->expects($this->$submittedValidTrue())
+        $this->session->expects($this->$submittedValidTrue())->method('getBag')->willReturn($this->sessionBag);
+        $this->sessionBag
+            ->expects($this->$submittedValidTrue())
             ->method('add')
             ->with($this->equalTo('success'), $this->stringContains($flashMessage));
 

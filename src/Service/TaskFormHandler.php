@@ -6,18 +6,18 @@ use App\Entity\Task;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class TaskFormHandler
 {
     private $em;
-    private $flash;
+    private $session;
     private $flashMessage = 'La tâche a été modifiée avec succès.';
 
-    public function __construct(EntityManagerInterface $em, FlashBagInterface $flash)
+    public function __construct(EntityManagerInterface $em, SessionInterface $session)
     {
         $this->em = $em;
-        $this->flash = $flash;
+        $this->session = $session;
     }
 
     public function handle(Request $request, Form $form, Task $task): bool
@@ -33,7 +33,7 @@ class TaskFormHandler
             $this->flashMessage = 'La tâche a été ajoutée avec succès.';
         }
 
-        $this->flash->add('success', $this->flashMessage);
+        $this->session->getBag('flashes')->add('success', $this->flashMessage);
 
         $this->em->flush();
 

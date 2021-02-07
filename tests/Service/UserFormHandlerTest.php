@@ -15,10 +15,11 @@ class UserFormHandlerTest extends KernelTestCase
     private $form;
     private $em;
     private $passwordEncoder;
-    private $flash;
+    private $session;
+    private $sessionBag;
     private $request;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()
@@ -32,7 +33,12 @@ class UserFormHandlerTest extends KernelTestCase
             ->getMockBuilder('Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface')
             ->getMock();
 
-        $this->flash = $this->getMockBuilder('Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface')
+        $this->session = $this->getMockBuilder('Symfony\Component\HttpFoundation\Session\SessionInterface')
+            ->setMethods(['start', 'getId', 'setId', 'getName', 'setName', 'invalidate', 'migrate', 'save', 'has', 'get', 'set', 'all', 'replace', 'remove', 'clear', 'isStarted', 'registerBag', 'getBag', 'getMetadataBag'])
+            ->getMock();
+
+        $this->sessionBag = $this->getMockBuilder('Symfony\Component\HttpFoundation\Session')
+            ->setMethods(['add'])
             ->getMock();
 
         $this->request = new Request();
@@ -76,7 +82,7 @@ class UserFormHandlerTest extends KernelTestCase
     {
         $this->setFormMethods($user, $submitted, $valid);
 
-        $handleForm = new UserFormHandler($this->em, $this->passwordEncoder, $this->flash);
+        $handleForm = new UserFormHandler($this->em, $this->passwordEncoder, $this->session);
         return $handleForm->handle($this->request, $this->form, $user);
     }
 
@@ -92,7 +98,9 @@ class UserFormHandlerTest extends KernelTestCase
 
         $this->passwordEncoder->expects($this->$submittedValidCreateForm())->method('encodePassword');
 
-        $this->flash->expects($this->$submittedValidTrue())
+        $this->session->expects($this->$submittedValidTrue())->method('getBag')->willReturn($this->sessionBag);
+        $this->sessionBag
+            ->expects($this->$submittedValidTrue())
             ->method('add')
             ->with($this->equalTo('success'), $this->stringContains($flashMessage));
 
