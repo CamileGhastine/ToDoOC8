@@ -423,7 +423,7 @@ class TaskControllerTest extends ControllerTest
     {
         $this->client->request('GET', '/tasks/1/delete');
 
-        $this->assertResponseRedirects('/login');
+        $this->assertResponseRedirects('/tasks');
     }
 
     public function testTaskUserDeleteCorrectlyInDBForUser()
@@ -483,7 +483,7 @@ class TaskControllerTest extends ControllerTest
         $taskAfter = $taskRepository->findOneBy(['id' => $id]);
 
         $this->assertSame(true, (bool)$taskAfter, "Task should not be delete");
-        $this->assertResponseRedirects('/login');
+        $this->assertResponseRedirects('/tasks');
     }
 
     public function testTaskDeleteNotAccessibleForTaskNotBelongToAdmin()
@@ -500,7 +500,7 @@ class TaskControllerTest extends ControllerTest
         $taskAfter = $taskRepository->findOneBy(['id' => $id]);
 
         $this->assertSame(true, (bool)$taskAfter, "Task should not be delete");
-        $this->assertResponseRedirects('/login');
+        $this->assertResponseRedirects('/tasks');
     }
 
     public function testTaskUserDeleteWithWrongToken()

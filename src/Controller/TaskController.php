@@ -138,7 +138,7 @@ class TaskController extends AbstractController
         CsrfTokenManagerInterface $tokenManager
     ): RedirectResponse {
         if (!$this->isGranted('TASK_DELETE', $task)) {
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('task_list');
         }
 
         if ($tokenManager->getToken('delete' . $task->getId())->getValue() !== $request->request->get('_token')) {
