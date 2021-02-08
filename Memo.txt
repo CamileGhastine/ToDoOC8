@@ -5,10 +5,9 @@ Improvement :
 - constraint on entities
 - Authorisation
 - token to forms
-
 - lts
-- Translation in french (title, content)
 
+- Translation in french (title, content)
 - display chapo in tasks list
 - limited date or edited date
 - responsive
