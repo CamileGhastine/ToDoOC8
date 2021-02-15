@@ -48,7 +48,7 @@ class Task
     private $isDone;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tests")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tasks")
      */
     private $user;
 
