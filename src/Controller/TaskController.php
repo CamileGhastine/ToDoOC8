@@ -37,7 +37,7 @@ class TaskController extends AbstractController
      * @param TaskRepository $taskRepository
      * @return Response
      */
-    public function taskIsDoneAction(TaskRepository $taskRepository): Response
+    public function listTaskIsDoneAction(TaskRepository $taskRepository): Response
     {
         if (!$this->isGranted('USER_CONNECT')) {
             return $this->redirectToRoute('app_login');

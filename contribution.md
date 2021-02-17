@@ -63,7 +63,7 @@ And correct for each standard the problems raised by PHP-CodeSniffer:
 Your proposed modifications will be examined. If they are deemed appropriate, they will be incorporated into the project.
 
 **Code quality:**  
-Use CideClimat (www.codeclimat.com) or Codacy (www.codacy.com ) to submit your code for quality control.  
+Use CodeClimat (www.codeclimat.com) or Codacy (www.codacy.com ) to submit your code for quality control.  
 If necessary, modify your code in order to resolve the problems raised.
 
 **Code performance:**  

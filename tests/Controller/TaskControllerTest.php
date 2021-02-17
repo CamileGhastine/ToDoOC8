@@ -41,7 +41,7 @@ class TaskControllerTest extends ControllerTest
         $crawler = $this->client->request('GET', '/tasks');
 
         $this->assertEquals(
-            count($this->getContainer()->get('doctrine')->getRepository('App:Task')->findAll()),
+            count($this->getContainer()->get('doctrine')->getRepository('App:Task')->findAllWithUser()),
             $crawler->filter('.task')->count()
         );
     }
@@ -59,7 +59,7 @@ class TaskControllerTest extends ControllerTest
         $crawler = $this->client->request('GET', '/tasks/done');
 
         $this->assertEquals(
-            count($this->getContainer()->get('doctrine')->getRepository('App:Task')->findTasksIsDone()),
+            count($this->getContainer()->get('doctrine')->getRepository('App:Task')->findTasksIsDoneWithUser()),
             $crawler->filter('.task')->count()
         );
     }
@@ -115,13 +115,13 @@ class TaskControllerTest extends ControllerTest
         $taskRepository = $this->getContainer()
             ->get('doctrine')
             ->getRepository('App:Task');
-        $countTasksBefore = count($taskRepository->findAll());
+        $countTasksBefore = count($taskRepository->findAllWithUser());
 
         $form = $this->fillForm($crawler);
         $this->client->submit($form);
 
         $this->assertEquals(
-            count($taskRepository->findAll()),
+            count($taskRepository->findAllWithUser()),
             $countTasksBefore + 1,
             "Task not register in DB"
         );
@@ -302,7 +302,7 @@ class TaskControllerTest extends ControllerTest
         $taskRepository = $this->getContainer()
             ->get('doctrine')
             ->getRepository('App:Task');
-        $countTasksBefore = count($taskRepository->findAll());
+        $countTasksBefore = count($taskRepository->findAllWithUser());
         $taskBeforeEdition = $taskRepository->findOneBy(['id' => 1]);
 
         $form = $crawler->selectButton('Modifier')->form();
@@ -310,7 +310,7 @@ class TaskControllerTest extends ControllerTest
         $this->client->submit($form);
 
         $this->assertEquals(
-            count($taskRepository->findAll()),
+            count($taskRepository->findAllWithUser()),
             $countTasksBefore,
             "Task Created or deleted in DB"
         );
