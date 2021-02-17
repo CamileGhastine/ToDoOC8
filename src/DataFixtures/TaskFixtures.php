@@ -16,7 +16,6 @@ class TaskFixtures extends Fixture implements dependentFixtureInterface
     public function load(ObjectManager $manager)
     {
         for ($i = 1; $i <= 3; $i++) {
-
             $name = self::NAMES[$i - 1];
 
             /** @var User $user */

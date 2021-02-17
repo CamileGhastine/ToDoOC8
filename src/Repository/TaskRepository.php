@@ -20,11 +20,26 @@ class TaskRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Task[] Returns an array of Task objects
+     * @return array
      */
-    public function findTasksIsDone(): array
+    public function findAllWithUser(): array
     {
         return $this->createQueryBuilder('t')
+            ->addSelect('u')
+            ->leftJoin('t.user', 'u')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Task[] Returns an array of Task objects
+     */
+    public function findTasksIsDoneWithUser(): array
+    {
+        return $this->createQueryBuilder('t')
+            ->addSelect('u')
+            ->leftJoin('t.user', 'u')
             ->Where('t.isDone = :val')
             ->setParameter('val', true)
             ->orderBy('t.createdAt', 'DESC')

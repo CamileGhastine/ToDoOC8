@@ -28,7 +28,7 @@ class TaskController extends AbstractController
 
         return $this->render(
             'task/list.html.twig',
-            ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findAll()]
+            ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findAllWithUser()]
         );
     }
 
@@ -43,7 +43,7 @@ class TaskController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findTasksIsDone()]);
+        return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findTasksIsDoneWithUser()]);
     }
 
     /**
