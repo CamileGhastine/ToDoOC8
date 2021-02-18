@@ -23,7 +23,8 @@ class ToggleTokenHandler
     {
         $taskId = $request->attributes->get('id');
 
-        if (!$request->$method->get('_token')
+        if (
+            !$request->$method->get('_token')
             || $this->tokenManager->getToken('toggle' . $taskId)->getValue() !== $request->$method->get('_token')
         ) {
             return false;
