@@ -1,0 +1,31 @@
+Développeur d'application - PHP/Symphony
+
+Projet 8 : ToDO & Co
+
+Lien GitHub vers le projet :
+https://github.com/CamileGhastine/ToDoOC8
+
+Instruction pour installer le projet :
+- README.md (à la racine du projet)
+
+Documentation technique concernant l'implémentation de l'authentification :
+- P8_03_Doc-authentification.pdf
+
+Document de contribution:
+- en français : P8_04_Doc-collabration.pdf
+- en anglais : collaboration.md (à la racine du projet)
+
+Rapport d'audit :
+- P8_05_Rapport-audit.pdf
+
+Code Climat :
+https://codeclimate.com/github/CamileGhastine/ToDoOC8/
+
+Couverture de code PHPUnit :
+https://localhost/test-coverage/
+
+Les documents ci-dessous sont en PJ et disponibles dans le projet dans le dossier /Livrables :
+- P8_02_diagrammes
+- P8_03_Doc-authentification.pdf
+- P8_04_Doc-collabration.pdf
+- P8_05_Rapport-audit.pdf
