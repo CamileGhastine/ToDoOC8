@@ -17,6 +17,7 @@ Document de contribution:
 
 Rapport d'audit :
 - P8_05_Rapport-audit.pdf
+- P8_06_Annexe-profils_Blackfire.pdf
 
 Code Climat :
 https://codeclimate.com/github/CamileGhastine/ToDoOC8/
@@ -29,3 +30,4 @@ Les documents ci-dessous sont en PJ et disponibles dans le projet dans le dossie
 - P8_03_Doc-authentification.pdf
 - P8_04_Doc-collabration.pdf
 - P8_05_Rapport-audit.pdf
+- P8_06_Annexe-profils_Blackfire.pdf
